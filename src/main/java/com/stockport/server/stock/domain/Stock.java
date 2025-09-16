@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -29,6 +30,9 @@ public class Stock {
 
     @Column(name = "enpAbbrvNm", length = 240)
     private String enpAbbrvNm; // 회사명(약칭)
+
+    @Column(name = "lstgDt")
+    private Date lstgDt;  // 상장일
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StockPrice> stockPrices; // StockPrice 엔티티와의 일대다 관계
