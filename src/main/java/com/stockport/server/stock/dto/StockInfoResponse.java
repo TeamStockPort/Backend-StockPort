@@ -1,4 +1,4 @@
-package com.stockport.server.dto;
+package com.stockport.server.stock.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;

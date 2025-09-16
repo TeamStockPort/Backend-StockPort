@@ -1,11 +1,9 @@
 package com.stockport.server.client;
 
-import com.stockport.server.dto.StockInfoResponse;
+import com.stockport.server.stock.client.StockApiClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 @SpringBootTest
 class StockApiClientTest {
