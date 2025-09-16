@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - StockApiClientTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>StockApiClientTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.stockport.server.client.html">com.stockport.server.client</a> &gt; StockApiClientTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.543s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a href="#">Tests</a>
+</li>
+<li>
+<a href="#">Standard output</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">testFetchAllByBasDT()</td>
+<td class="success">0.543s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>13:02:36.782 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.stockport.server.client.StockApiClientTest]: StockApiClientTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+13:02:36.831 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.stockport.server.ServerApplication for test class com.stockport.server.client.StockApiClientTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2025-09-16T13:02:37.005+09:00  INFO 16860 --- [    Test worker] c.s.server.client.StockApiClientTest     : Starting StockApiClientTest using Java 17.0.12 with PID 16860 (started by noh-jeongyun in /Users/noh-jeongyun/Desktop/stockport)
+2025-09-16T13:02:37.006+09:00  INFO 16860 --- [    Test worker] c.s.server.client.StockApiClientTest     : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2025-09-16T13:02:37.252+09:00  INFO 16860 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-16T13:02:37.260+09:00  INFO 16860 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 4 ms. Found 0 JPA repository interfaces.
+2025-09-16T13:02:37.386+09:00  INFO 16860 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-09-16T13:02:37.456+09:00  INFO 16860 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-09-16T13:02:37.457+09:00  INFO 16860 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-09-16T13:02:37.480+09:00  INFO 16860 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-16T13:02:37.505+09:00  INFO 16860 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
+2025-09-16T13:02:37.520+09:00  INFO 16860 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-09-16T13:02:37.626+09:00  INFO 16860 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-16T13:02:37.658+09:00  INFO 16860 --- [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-16T13:02:37.786+09:00  INFO 16860 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-16T13:02:37.788+09:00  INFO 16860 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-16T13:02:37.848+09:00  WARN 16860 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-09-16T13:02:37.982+09:00  INFO 16860 --- [    Test worker] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-09-16T13:02:38.015+09:00  INFO 16860 --- [    Test worker] c.s.server.client.StockApiClientTest     : Started StockApiClientTest in 1.124 seconds (process running for 1.563)
+200 OK {&quot;response&quot;:{&quot;header&quot;:{&quot;resultCode&quot;:&quot;00&quot;,&quot;resultMsg&quot;:&quot;NORMAL SERVICE.&quot;},&quot;body&quot;:{&quot;numOfRows&quot;:10,&quot;pageNo&quot;:1,&quot;totalCount&quot;:2878,&quot;items&quot;:{&quot;item&quot;:[{&quot;basDt&quot;:&quot;20250915&quot;,&quot;srtnCd&quot;:&quot;900110&quot;,&quot;isinCd&quot;:&quot;HK0000057197&quot;,&quot;itmsNm&quot;:&quot;이스트아시아홀딩스&quot;,&quot;mrktCtg&quot;:&quot;KOSDAQ&quot;,&quot;clpr&quot;:&quot;77&quot;,&quot;vs&quot;:&quot;0&quot;,&quot;fltRt&quot;:&quot;0&quot;,&quot;mkp&quot;:&quot;0&quot;,&quot;hipr&quot;:&quot;0&quot;,&quot;lopr&quot;:&quot;0&quot;,&quot;trqu&quot;:&quot;0&quot;,&quot;trPrc&quot;:&quot;0&quot;,&quot;lstgStCnt&quot;:&quot;642650588&quot;,&quot;mrktTotAmt&quot;:&quot;49484095276&quot;},{&quot;basDt&quot;:&quot;20250915&quot;,&quot;srtnCd&quot;:&quot;900270&quot;,&quot;isinCd&quot;:&quot;HK0000214814&quot;,&quot;itmsNm&quot;:&quot;헝셩그룹&quot;,&quot;mrktCtg&quot;:&quot;KOSDAQ&quot;,&quot;clpr&quot;:&quot;232&quot;,&quot;vs&quot;:&quot;-1&quot;,&quot;fltRt&quot;:&quot;-.43&quot;,&quot;mkp&quot;:&quot;233&quot;,&quot;hipr&quot;:&quot;235&quot;,&quot;lopr&quot;:&quot;231&quot;,&quot;trqu&quot;:&quot;2899676&quot;,&quot;trPrc&quot;:&quot;673444481&quot;,&quot;lstgStCnt&quot;:&quot;188047040&quot;,&quot;mrktTotAmt&quot;:&quot;43626913280&quot;},{&quot;basDt&quot;:&quot;20250915&quot;,&quot;srtnCd&quot;:&quot;900260&quot;,&quot;isinCd&quot;:&quot;HK0000295359&quot;,&quot;itmsNm&quot;:&quot;로스웰&quot;,&quot;mrktCtg&quot;:&quot;KOSDAQ&quot;,&quot;clpr&quot;:&quot;1021&quot;,&quot;vs&quot;:&quot;-9&quot;,&quot;fltRt&quot;:&quot;-.87&quot;,&quot;mkp&quot;:&quot;1030&quot;,&quot;hipr&quot;:&quot;1042&quot;,&quot;lopr&quot;:&quot;1018&quot;,&quot;trqu&quot;:&quot;51183&quot;,&quot;trPrc&quot;:&quot;52307597&quot;,&quot;lstgStCnt&quot;:&quot;36031288&quot;,&quot;mrktTotAmt&quot;:&quot;36787945048&quot;},{&quot;basDt&quot;:&quot;20250915&quot;,&quot;srtnCd&quot;:&quot;900290&quot;,&quot;isinCd&quot;:&quot;HK0000307485&quot;,&quot;itmsNm&quot;:&quot;GRT&quot;,&quot;mrktCtg&quot;:&quot;KOSDAQ&quot;,&quot;clpr&quot;:&quot;3080&quot;,&quot;vs&quot;:&quot;-30&quot;,&quot;fltRt&quot;:&quot;-.96&quot;,&quot;mkp&quot;:&quot;3190&quot;,&quot;hipr&quot;:&quot;3190&quot;,&quot;lopr&quot;:&quot;3070&quot;,&quot;trqu&quot;:&quot;170238&quot;,&quot;trPrc&quot;:&quot;526833977&quot;,&quot;lstgStCnt&quot;:&quot;80850000&quot;,&quot;mrktTotAmt&quot;:&quot;249018000000&quot;},{&quot;basDt&quot;:&quot;20250915&quot;,&quot;srtnCd&quot;:&quot;900300&quot;,&quot;isinCd&quot;:&quot;HK0000312568&quot;,&quot;itmsNm&quot;:&quot;오가닉티코스메틱&quot;,&quot;mrktCtg&quot;:&quot;KOSDAQ&quot;,&quot;clpr&quot;:&quot;362&quot;,&quot;vs&quot;:&quot;2&quot;,&quot;fltRt&quot;:&quot;.56&quot;,&quot;mkp&quot;:&quot;361&quot;,&quot;hipr&quot;:&quot;373&quot;,&quot;lopr&quot;:&quot;360&quot;,&quot;trqu&quot;:&quot;909888&quot;,&quot;trPrc&quot;:&quot;331190948&quot;,&quot;lstgStCnt&quot;:&quot;96002224&quot;,&quot;mrktTotAmt&quot;:&quot;34752805088&quot;},{&quot;basDt&quot;:&quot;20250915&quot;,&quot;srtnCd&quot;:&quot;900310&quot;,&quot;isinCd&quot;:&quot;HK0000341732&quot;,&quot;itmsNm&quot;:&quot;컬러레이&quot;,&quot;mrktCtg&quot;:&quot;KOSDAQ&quot;,&quot;clpr&quot;:&quot;701&quot;,&quot;vs&quot;:&quot;-1&quot;,&quot;fltRt&quot;:&quot;-.14&quot;,&quot;mkp&quot;:&quot;705&quot;,&quot;hipr&quot;:&quot;705&quot;,&quot;lopr&quot;:&quot;699&quot;,&quot;trqu&quot;:&quot;5652&quot;,&quot;trPrc&quot;:&quot;3962415&quot;,&quot;lstgStCnt&quot;:&quot;64041675&quot;,&quot;mrktTotAmt&quot;:&quot;44893214175&quot;},{&quot;basDt&quot;:&quot;20250915&quot;,&quot;srtnCd&quot;:&quot;900340&quot;,&quot;isinCd&quot;:&quot;HK0000449303&quot;,&quot;itmsNm&quot;:&quot;윙입푸드&quot;,&quot;mrktCtg&quot;:&quot;KOSDAQ&quot;,&quot;clpr&quot;:&quot;1106&quot;,&quot;vs&quot;:&quot;-12&quot;,&quot;fltRt&quot;:&quot;-1.07&quot;,&quot;mkp&quot;:&quot;1124&quot;,&quot;hipr&quot;:&quot;1125&quot;,&quot;lopr&quot;:&quot;1103&quot;,&quot;trqu&quot;:&quot;100574&quot;,&quot;trPrc&quot;:&quot;111731569&quot;,&quot;lstgStCnt&quot;:&quot;50330928&quot;,&quot;mrktTotAmt&quot;:&quot;55666006368&quot;},{&quot;basDt&quot;:&quot;20250915&quot;,&quot;srtnCd&quot;:&quot;000020&quot;,&quot;isinCd&quot;:&quot;KR7000020008&quot;,&quot;itmsNm&quot;:&quot;동화약품&quot;,&quot;mrktCtg&quot;:&quot;KOSPI&quot;,&quot;clpr&quot;:&quot;6420&quot;,&quot;vs&quot;:&quot;10&quot;,&quot;fltRt&quot;:&quot;.16&quot;,&quot;mkp&quot;:&quot;6410&quot;,&quot;hipr&quot;:&quot;6460&quot;,&quot;lopr&quot;:&quot;6370&quot;,&quot;trqu&quot;:&quot;63897&quot;,&quot;trPrc&quot;:&quot;409844475&quot;,&quot;lstgStCnt&quot;:&quot;27931470&quot;,&quot;mrktTotAmt&quot;:&quot;179320037400&quot;},{&quot;basDt&quot;:&quot;20250915&quot;,&quot;srtnCd&quot;:&quot;000040&quot;,&quot;isinCd&quot;:&quot;KR7000040006&quot;,&quot;itmsNm&quot;:&quot;KR모터스&quot;,&quot;mrktCtg&quot;:&quot;KOSPI&quot;,&quot;clpr&quot;:&quot;538&quot;,&quot;vs&quot;:&quot;1&quot;,&quot;fltRt&quot;:&quot;.19&quot;,&quot;mkp&quot;:&quot;537&quot;,&quot;hipr&quot;:&quot;549&quot;,&quot;lopr&quot;:&quot;534&quot;,&quot;trqu&quot;:&quot;170136&quot;,&quot;trPrc&quot;:&quot;91349940&quot;,&quot;lstgStCnt&quot;:&quot;86375184&quot;,&quot;mrktTotAmt&quot;:&quot;46469848992&quot;},{&quot;basDt&quot;:&quot;20250915&quot;,&quot;srtnCd&quot;:&quot;000050&quot;,&quot;isinCd&quot;:&quot;KR7000050005&quot;,&quot;itmsNm&quot;:&quot;경방&quot;,&quot;mrktCtg&quot;:&quot;KOSPI&quot;,&quot;clpr&quot;:&quot;7300&quot;,&quot;vs&quot;:&quot;30&quot;,&quot;fltRt&quot;:&quot;.41&quot;,&quot;mkp&quot;:&quot;7320&quot;,&quot;hipr&quot;:&quot;7370&quot;,&quot;lopr&quot;:&quot;7250&quot;,&quot;trqu&quot;:&quot;25478&quot;,&quot;trPrc&quot;:&quot;186180140&quot;,&quot;lstgStCnt&quot;:&quot;27415270&quot;,&quot;mrktTotAmt&quot;:&quot;200131471000&quot;}]}}}}
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 8.14.3</a> at 2025. 9. 16. 오후 1:02:38</p>
+</div>
+</div>
+</body>
+</html>

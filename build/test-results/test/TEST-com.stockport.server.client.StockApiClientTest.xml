@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.stockport.server.client.StockApiClientTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-09-16T04:02:38.020Z" hostname="jeongyunui-MacBookAir.local" time="0.543">
+  <properties/>
+  <testcase name="testFetchAllByBasDT()" classname="com.stockport.server.client.StockApiClientTest" time="0.543"/>
+  <system-out><![CDATA[13:02:36.782 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.stockport.server.client.StockApiClientTest]: StockApiClientTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+13:02:36.831 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.stockport.server.ServerApplication for test class com.stockport.server.client.StockApiClientTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2025-09-16T13:02:37.005+09:00  INFO 16860 --- [    Test worker] c.s.server.client.StockApiClientTest     : Starting StockApiClientTest using Java 17.0.12 with PID 16860 (started by noh-jeongyun in /Users/noh-jeongyun/Desktop/stockport)
+2025-09-16T13:02:37.006+09:00  INFO 16860 --- [    Test worker] c.s.server.client.StockApiClientTest     : No active profile set, falling back to 1 default profile: "default"
+2025-09-16T13:02:37.252+09:00  INFO 16860 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-16T13:02:37.260+09:00  INFO 16860 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 4 ms. Found 0 JPA repository interfaces.
+2025-09-16T13:02:37.386+09:00  INFO 16860 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-09-16T13:02:37.456+09:00  INFO 16860 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-09-16T13:02:37.457+09:00  INFO 16860 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-09-16T13:02:37.480+09:00  INFO 16860 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-16T13:02:37.505+09:00  INFO 16860 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
+2025-09-16T13:02:37.520+09:00  INFO 16860 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-09-16T13:02:37.626+09:00  INFO 16860 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-16T13:02:37.658+09:00  INFO 16860 --- [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-16T13:02:37.786+09:00  INFO 16860 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-16T13:02:37.788+09:00  INFO 16860 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-16T13:02:37.848+09:00  WARN 16860 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-09-16T13:02:37.982+09:00  INFO 16860 --- [    Test worker] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-09-16T13:02:38.015+09:00  INFO 16860 --- [    Test worker] c.s.server.client.StockApiClientTest     : Started StockApiClientTest in 1.124 seconds (process running for 1.563)
+200 OK {"response":{"header":{"resultCode":"00","resultMsg":"NORMAL SERVICE."},"body":{"numOfRows":10,"pageNo":1,"totalCount":2878,"items":{"item":[{"basDt":"20250915","srtnCd":"900110","isinCd":"HK0000057197","itmsNm":"이스트아시아홀딩스","mrktCtg":"KOSDAQ","clpr":"77","vs":"0","fltRt":"0","mkp":"0","hipr":"0","lopr":"0","trqu":"0","trPrc":"0","lstgStCnt":"642650588","mrktTotAmt":"49484095276"},{"basDt":"20250915","srtnCd":"900270","isinCd":"HK0000214814","itmsNm":"헝셩그룹","mrktCtg":"KOSDAQ","clpr":"232","vs":"-1","fltRt":"-.43","mkp":"233","hipr":"235","lopr":"231","trqu":"2899676","trPrc":"673444481","lstgStCnt":"188047040","mrktTotAmt":"43626913280"},{"basDt":"20250915","srtnCd":"900260","isinCd":"HK0000295359","itmsNm":"로스웰","mrktCtg":"KOSDAQ","clpr":"1021","vs":"-9","fltRt":"-.87","mkp":"1030","hipr":"1042","lopr":"1018","trqu":"51183","trPrc":"52307597","lstgStCnt":"36031288","mrktTotAmt":"36787945048"},{"basDt":"20250915","srtnCd":"900290","isinCd":"HK0000307485","itmsNm":"GRT","mrktCtg":"KOSDAQ","clpr":"3080","vs":"-30","fltRt":"-.96","mkp":"3190","hipr":"3190","lopr":"3070","trqu":"170238","trPrc":"526833977","lstgStCnt":"80850000","mrktTotAmt":"249018000000"},{"basDt":"20250915","srtnCd":"900300","isinCd":"HK0000312568","itmsNm":"오가닉티코스메틱","mrktCtg":"KOSDAQ","clpr":"362","vs":"2","fltRt":".56","mkp":"361","hipr":"373","lopr":"360","trqu":"909888","trPrc":"331190948","lstgStCnt":"96002224","mrktTotAmt":"34752805088"},{"basDt":"20250915","srtnCd":"900310","isinCd":"HK0000341732","itmsNm":"컬러레이","mrktCtg":"KOSDAQ","clpr":"701","vs":"-1","fltRt":"-.14","mkp":"705","hipr":"705","lopr":"699","trqu":"5652","trPrc":"3962415","lstgStCnt":"64041675","mrktTotAmt":"44893214175"},{"basDt":"20250915","srtnCd":"900340","isinCd":"HK0000449303","itmsNm":"윙입푸드","mrktCtg":"KOSDAQ","clpr":"1106","vs":"-12","fltRt":"-1.07","mkp":"1124","hipr":"1125","lopr":"1103","trqu":"100574","trPrc":"111731569","lstgStCnt":"50330928","mrktTotAmt":"55666006368"},{"basDt":"20250915","srtnCd":"000020","isinCd":"KR7000020008","itmsNm":"동화약품","mrktCtg":"KOSPI","clpr":"6420","vs":"10","fltRt":".16","mkp":"6410","hipr":"6460","lopr":"6370","trqu":"63897","trPrc":"409844475","lstgStCnt":"27931470","mrktTotAmt":"179320037400"},{"basDt":"20250915","srtnCd":"000040","isinCd":"KR7000040006","itmsNm":"KR모터스","mrktCtg":"KOSPI","clpr":"538","vs":"1","fltRt":".19","mkp":"537","hipr":"549","lopr":"534","trqu":"170136","trPrc":"91349940","lstgStCnt":"86375184","mrktTotAmt":"46469848992"},{"basDt":"20250915","srtnCd":"000050","isinCd":"KR7000050005","itmsNm":"경방","mrktCtg":"KOSPI","clpr":"7300","vs":"30","fltRt":".41","mkp":"7320","hipr":"7370","lopr":"7250","trqu":"25478","trPrc":"186180140","lstgStCnt":"27415270","mrktTotAmt":"200131471000"}]}}}}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
