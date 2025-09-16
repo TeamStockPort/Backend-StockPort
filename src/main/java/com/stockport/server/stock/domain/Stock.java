@@ -1,11 +1,11 @@
 package com.stockport.server.stock.domain;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +29,9 @@ public class Stock {
 
     @Column(name = "enpAbbrvNm", length = 240)
     private String enpAbbrvNm; // 회사명(약칭)
+
+    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StockPrice> stockPrices; // StockPrice 엔티티와의 일대다 관계
 
     @Builder
     private Stock(String isinCd, String srtnCd, String itmsNm, String mrktCtg, String enpNm, String enpAbbrvNm) {

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static jakarta.persistence.FetchType.*;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
@@ -18,8 +20,9 @@ public class StockPrice {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "isinCd", length = 20, nullable = false)
-    private String isinCd; // 종목 식별코드 (FK: Stock.isinCd)
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "stock_isinCd", nullable = false)
+    private Stock stock; // Stock 엔티티와의 다대일 관계
 
     @Column(name = "basDt", nullable = false)
     private LocalDate basDt; // 기준일자
@@ -46,8 +49,8 @@ public class StockPrice {
     private Long mrktTotAmt; // 시가총액
 
     @Builder
-    private StockPrice(String isinCd, LocalDate basDt, Integer clpr, Integer mkp, Integer hipr, Integer lopr, Integer vs, BigDecimal fltRt, Long mrktTotAmt) {
-        this.isinCd = isinCd;
+    private StockPrice(Stock stock, LocalDate basDt, Integer clpr, Integer mkp, Integer hipr, Integer lopr, Integer vs, BigDecimal fltRt, Long mrktTotAmt) {
+        this.stock = stock;
         this.basDt = basDt;
         this.clpr = clpr;
         this.mkp = mkp;
@@ -58,9 +61,9 @@ public class StockPrice {
         this.mrktTotAmt = mrktTotAmt;
     }
 
-    public static StockPrice create(String isinCd, LocalDate basDt, Integer clpr, Integer mkp, Integer hipr, Integer lopr, Integer vs, BigDecimal fltRt, Long mrktTotAmt) {
+    public static StockPrice create(Stock stock, LocalDate basDt, Integer clpr, Integer mkp, Integer hipr, Integer lopr, Integer vs, BigDecimal fltRt, Long mrktTotAmt) {
         return StockPrice.builder()
-                .isinCd(isinCd)
+                .stock(stock)
                 .basDt(basDt)
                 .clpr(clpr)
                 .mkp(mkp)
