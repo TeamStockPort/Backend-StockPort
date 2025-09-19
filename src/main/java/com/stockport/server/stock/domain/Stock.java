@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -32,22 +33,23 @@ public class Stock {
     private String enpAbbrvNm; // 회사명(약칭)
 
     @Column(name = "lstgDt")
-    private Date lstgDt;  // 상장일
+    private LocalDate lstgDt;  // 상장일
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StockPrice> stockPrices; // StockPrice 엔티티와의 일대다 관계
 
     @Builder
-    private Stock(String isinCd, String srtnCd, String itmsNm, String mrktCtg, String enpNm, String enpAbbrvNm) {
+    private Stock(String isinCd, String srtnCd, String itmsNm, String mrktCtg, String enpNm, String enpAbbrvNm, LocalDate lstgDt) {
         this.isinCd = isinCd;
         this.srtnCd = srtnCd;
         this.itmsNm = itmsNm;
         this.mrktCtg = mrktCtg;
         this.enpNm = enpNm;
         this.enpAbbrvNm = enpAbbrvNm;
+        this.lstgDt = lstgDt;
     }
 
-    public static Stock create(String isinCd, String srtnCd, String itmsNm, String mrktCtg, String enpNm, String enpAbbrvNm) {
+    public static Stock create(String isinCd, String srtnCd, String itmsNm, String mrktCtg, String enpNm, String enpAbbrvNm, LocalDate lstgDt) {
         return Stock.builder()
                 .isinCd(isinCd)
                 .srtnCd(srtnCd)
@@ -55,6 +57,7 @@ public class Stock {
                 .mrktCtg(mrktCtg)
                 .enpNm(enpNm)
                 .enpAbbrvNm(enpAbbrvNm)
+                .lstgDt(lstgDt)
                 .build();
     }
 }
