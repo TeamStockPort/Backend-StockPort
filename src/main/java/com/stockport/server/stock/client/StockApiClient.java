@@ -3,14 +3,17 @@ package com.stockport.server.stock.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stockport.server.stock.dto.StockInfoResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class StockApiClient {
@@ -60,11 +63,16 @@ public class StockApiClient {
                 return mapper.readerForListOf(StockInfoResponse.class).readValue(itemsNode);
             } else if (!itemsNode.isMissingNode() && !itemsNode.isNull()) {
                 var one = mapper.treeToValue(itemsNode, StockInfoResponse.class);
-                return java.util.List.of(one);
+                return List.of(one);
             } else {
-                return java.util.Collections.emptyList();
+                return Collections.emptyList();
             }
         } catch (Exception e) {
+            HttpStatusCode st = response.getStatusCode();
+            MediaType ct = response.getHeaders().getContentType();
+            String body = response.getBody();
+            String peek = (body == null) ? "null" : body.substring(0, Math.min(body.length(), 500));
+            log.error("파싱 실패 - status={}, contentType={}, body[0..500]={}", st, ct, peek, e);
             throw new RuntimeException("상장종목 응답 파싱 실패", e);
         }
     }

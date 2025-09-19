@@ -18,7 +18,7 @@ public class Stock {
     private String isinCd;   // 종목 식별 고유번호 (PK)
 
     @Column(name = "srtnCd", length = 9, nullable = false)
-    private String srtnCd;   // 한국거래소 종목코드
+    private String srtnCd;   // 단축코드
 
     @Column(name = "itmsNm", length = 240, nullable = false)
     private String itmsNm;   // 종목명
@@ -29,35 +29,30 @@ public class Stock {
     @Column(name = "enpNm", length = 240)
     private String enpNm;    // 회사명
 
-    @Column(name = "enpAbbrvNm", length = 240)
-    private String enpAbbrvNm; // 회사명(약칭)
-
-    @Column(name = "lstgDt")
-    private LocalDate lstgDt;  // 상장일
+    @Column(name = "crno", length = 240)
+    private String crno; // 법인명
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StockPrice> stockPrices; // StockPrice 엔티티와의 일대다 관계
 
     @Builder
-    private Stock(String isinCd, String srtnCd, String itmsNm, String mrktCtg, String enpNm, String enpAbbrvNm, LocalDate lstgDt) {
+    private Stock(String isinCd, String srtnCd, String itmsNm, String mrktCtg, String enpNm, String crno) {
         this.isinCd = isinCd;
         this.srtnCd = srtnCd;
         this.itmsNm = itmsNm;
         this.mrktCtg = mrktCtg;
         this.enpNm = enpNm;
-        this.enpAbbrvNm = enpAbbrvNm;
-        this.lstgDt = lstgDt;
+        this.crno = crno;
     }
 
-    public static Stock create(String isinCd, String srtnCd, String itmsNm, String mrktCtg, String enpNm, String enpAbbrvNm, LocalDate lstgDt) {
+    public static Stock create(String isinCd, String srtnCd, String itmsNm, String mrktCtg, String enpNm, String crno) {
         return Stock.builder()
                 .isinCd(isinCd)
                 .srtnCd(srtnCd)
                 .itmsNm(itmsNm)
                 .mrktCtg(mrktCtg)
                 .enpNm(enpNm)
-                .enpAbbrvNm(enpAbbrvNm)
-                .lstgDt(lstgDt)
+                .crno(crno)
                 .build();
     }
 }
