@@ -7,3 +7,6 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password: password
+api:
+  url: https://apis.data.go.kr/1160100/service/GetKrxListedInfoService/getItemInfo
+  key: c49c143982d14a55271e9cb2c0c6ffa4abd0e6eb9558bccb0ba7279906567552
