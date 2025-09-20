@@ -2,7 +2,7 @@ package com.stockport.server.stock.service;
 
 import com.stockport.server.stock.client.StockApiClient;
 import com.stockport.server.stock.domain.Stock;
-import com.stockport.server.stock.dto.StockInfoResponse;
+import com.stockport.server.stock.dto.StockInfoDto;
 import com.stockport.server.stock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class StockServiceImpl implements StockService {
         var stockInfos = stockApiClient.fetchAllByBasDT(baseDt);
 
         var stocks = stockInfos.stream()
-                .map(StockInfoResponse::toEntity)
+                .map(StockInfoDto::toEntity)
                 .toList();
         // 새로 조회한 ISIN 코드 집합
         var incomingIsins = stocks.stream()

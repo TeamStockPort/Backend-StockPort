@@ -27,29 +27,22 @@ public class StockPrice {
     @Column(name = "basDt", nullable = false)
     private LocalDate basDt; // 기준일자
 
-    @Column(name = "clpr")
     private Integer clpr; // 종가
-
-    @Column(name = "mkp")
     private Integer mkp; // 시가
-
-    @Column(name = "hipr")
     private Integer hipr; // 고가
-
-    @Column(name = "lopr")
     private Integer lopr; // 저가
-
-    @Column(name = "vs")
     private Integer vs; // 전일 대비 등락
 
     @Column(name = "fltRt", precision = 5, scale = 2)
     private BigDecimal fltRt; // 등락률 (소수 둘째 자리까지)
 
-    @Column(name = "mrktTotAmt")
     private Long mrktTotAmt; // 시가총액
+    private Long trqu;     // 거래량
+    private Long trPrc;      // 거래대금
+    private Long lstgStCnt;    // 상장주식수
 
     @Builder
-    private StockPrice(Stock stock, LocalDate basDt, Integer clpr, Integer mkp, Integer hipr, Integer lopr, Integer vs, BigDecimal fltRt, Long mrktTotAmt) {
+    private StockPrice(Stock stock, LocalDate basDt, Integer clpr, Integer mkp, Integer hipr, Integer lopr, Integer vs, BigDecimal fltRt, Long mrktTotAmt, Long trqu, Long trPrc, Long lstgStCnt) {
         this.stock = stock;
         this.basDt = basDt;
         this.clpr = clpr;
@@ -59,9 +52,12 @@ public class StockPrice {
         this.vs = vs;
         this.fltRt = fltRt;
         this.mrktTotAmt = mrktTotAmt;
+        this.trqu = trqu;
+        this.trPrc = trPrc;
+        this.lstgStCnt = lstgStCnt;
     }
 
-    public static StockPrice create(Stock stock, LocalDate basDt, Integer clpr, Integer mkp, Integer hipr, Integer lopr, Integer vs, BigDecimal fltRt, Long mrktTotAmt) {
+    public static StockPrice create(Stock stock, LocalDate basDt, Integer clpr, Integer mkp, Integer hipr, Integer lopr, Integer vs, BigDecimal fltRt, Long mrktTotAmt, Long trqu, Long trPrc, Long lstgStCnt) {
         return StockPrice.builder()
                 .stock(stock)
                 .basDt(basDt)
@@ -72,6 +68,9 @@ public class StockPrice {
                 .vs(vs)
                 .fltRt(fltRt)
                 .mrktTotAmt(mrktTotAmt)
+                .trqu(trqu)
+                .trPrc(trPrc)
+                .lstgStCnt(lstgStCnt)
                 .build();
     }
 }
