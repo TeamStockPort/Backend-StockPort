@@ -25,7 +25,7 @@ public class StockPriceApiClient {
     private final RestTemplate restTemplate = new RestTemplate();
 
     // 모든 주식의 가격 정보를 날짜(basDt)로 조회
-    public StockPriceDto[] getAllStockPricesByDate(String basDt) {
+    public List<StockPriceDto> getAllStockPricesByDate(String basDt) {
         String endpoint = url + "/getStockPriceInfo";
         String uri = UriComponentsBuilder.fromHttpUrl(endpoint)
                 .queryParam("serviceKey", apiKey)
@@ -56,12 +56,12 @@ public class StockPriceApiClient {
 
             if (itemsNode.isArray()) {
                 List<StockPriceDto> list = mapper.readerForListOf(StockPriceDto.class).readValue(itemsNode);
-                return list.toArray(new StockPriceDto[0]);
+                return list;
             } else if (!itemsNode.isMissingNode() && !itemsNode.isNull()) {
                 StockPriceDto one = mapper.treeToValue(itemsNode, StockPriceDto.class);
-                return new StockPriceDto[]{ one };
+                return List.of(one);
             } else {
-                return new StockPriceDto[0];
+                return List.of();
             }
         } catch (Exception e) {
             HttpStatusCode st = response.getStatusCode();
@@ -74,7 +74,7 @@ public class StockPriceApiClient {
     }
 
     // 주식코드로 주식의 여태까지의 모든 가격정보를 조회
-    public StockPriceDto[] getStockPriceHistory(String stockCode) {
+    public List<StockPriceDto> getStockPriceHistory(String stockCode) {
         String endpoint = url + "/getStockPriceInfo";
         String uri = UriComponentsBuilder.fromHttpUrl(endpoint)
                 .queryParam("serviceKey", apiKey)
@@ -105,12 +105,12 @@ public class StockPriceApiClient {
 
             if (itemsNode.isArray()) {
                 List<StockPriceDto> list = mapper.readerForListOf(StockPriceDto.class).readValue(itemsNode);
-                return list.toArray(new StockPriceDto[0]);
+                return list;
             } else if (!itemsNode.isMissingNode() && !itemsNode.isNull()) {
                 StockPriceDto one = mapper.treeToValue(itemsNode, StockPriceDto.class);
-                return new StockPriceDto[]{ one };
+                return List.of(one);
             } else {
-                return new StockPriceDto[0];
+                return List.of();
             }
         } catch (Exception e) {
             HttpStatusCode st = response.getStatusCode();

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class StockSchduler {
+public class StockScheduler {
     private final StockService stockService;
 
     @Scheduled(cron = "0 50 23 * * *", zone = "Asia/Seoul") // 매일 오후 11시 50분에 실행
