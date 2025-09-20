@@ -33,6 +33,11 @@ public class StockServiceImpl implements StockService {
 
         var stockInfos = stockApiClient.fetchAllByBasDT(baseDt);
 
+        if (stockInfos.isEmpty()) {
+            log.info("No stock data fetched for date: " + baseDt);
+            return;
+        }
+
         var stocks = stockInfos.stream()
                 .map(StockInfoDto::toEntity)
                 .toList();
