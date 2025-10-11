@@ -1,6 +1,7 @@
 package com.stockport.server.stock.scheduler;
 
 import com.stockport.server.stock.service.StockPriceService;
+import de.jollyday.HolidayManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,11 +15,17 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class StockPriceScheduler {
     private final StockPriceService stockPriceService;
+    private final HolidayManager holidayManager;
 
     @Scheduled(cron = "0 50 23 * * *", zone = "Asia/Seoul") // 매일 오후 11시 50분에 실행
     public void runDaily() {
         try {
-            stockPriceService.fetchAndSaveStockPricesByBasDt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+            LocalDate today = LocalDate.now();
+            if (holidayManager.isHoliday(today) || today.getDayOfWeek().getValue() >= 6) { // 주말, 공휴일인 경우
+                log.info("Today is a holiday or weekend. Skipping stock price data fetch.");
+                return;
+            }
+            stockPriceService.fetchAndSaveStockPricesByBasDt(today);
             log.info("주식 시세 데이터 업데이트 완료");
         } catch (Exception e) {
             log.error("주식 시세 데이터 업데이트 실패: " + e.getMessage());
