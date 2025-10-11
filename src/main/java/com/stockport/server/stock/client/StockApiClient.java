@@ -1,7 +1,7 @@
 package com.stockport.server.stock.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stockport.server.stock.dto.StockInfoResponse;
+import com.stockport.server.stock.dto.StockInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +29,7 @@ public class StockApiClient {
         this.mapper = new ObjectMapper();
     }
 
-    public List<StockInfoResponse> fetchAllByBasDT(String basDt) {
+    public List<StockInfoDto> fetchAllByBasDT(String basDt) {
         String url = buildUrl(basDt, 1, 10000);
 
         HttpHeaders headers = new HttpHeaders();
@@ -60,9 +60,9 @@ public class StockApiClient {
 
             // item이 배열로 오거나(다건), 객체 하나로 오거나(단건) 모두 대응
             if (itemsNode.isArray()) {
-                return mapper.readerForListOf(StockInfoResponse.class).readValue(itemsNode);
+                return mapper.readerForListOf(StockInfoDto.class).readValue(itemsNode);
             } else if (!itemsNode.isMissingNode() && !itemsNode.isNull()) {
-                var one = mapper.treeToValue(itemsNode, StockInfoResponse.class);
+                var one = mapper.treeToValue(itemsNode, StockInfoDto.class);
                 return List.of(one);
             } else {
                 return Collections.emptyList();

@@ -2,11 +2,12 @@ package com.stockport.server.stock.service;
 
 import com.stockport.server.stock.client.StockApiClient;
 import com.stockport.server.stock.domain.Stock;
-import com.stockport.server.stock.dto.StockInfoResponse;
+import com.stockport.server.stock.dto.StockInfoDto;
 import com.stockport.server.stock.repository.StockRepository;
+import de.jollyday.HolidayManager;
+import de.jollyday.ManagerParameters;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,24 +18,31 @@ import java.util.Objects;
 
 import static java.util.stream.Collectors.toSet;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StockServiceImpl implements StockService {
-    private static final Logger log = LoggerFactory.getLogger(StockServiceImpl.class);
     private final StockRepository stockRepository;
     private final StockApiClient stockApiClient;
+    private final HolidayManager holidayManager;
 
     @Override
     public void fetchAndStoreStocks() {
-        String baseDt = LocalDate
-                .now(ZoneId.of("Asia/Seoul"))
-                .minusDays(1)
-                .format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        if (holidayManager.isHoliday(today) || today.getDayOfWeek().getValue() >= 6) { // 주말, 공휴일인 경우
+            log.info("Today is a holiday or weekend. Skipping stock data fetch.");
+            return;
+        }
 
+        String baseDt = today.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         var stockInfos = stockApiClient.fetchAllByBasDT(baseDt);
+        if (stockInfos.isEmpty()) { // 데이터가 없는 경우 처리
+            log.info("No stock data fetched for date: " + baseDt);
+            return;
+        }
 
         var stocks = stockInfos.stream()
-                .map(StockInfoResponse::toEntity)
+                .map(StockInfoDto::toEntity)
                 .toList();
         // 새로 조회한 ISIN 코드 집합
         var incomingIsins = stocks.stream()
