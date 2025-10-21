@@ -50,17 +50,16 @@ public class KisTokenHolder {
                 .atZone(ZoneId.of("Asia/Seoul"))
                 .toInstant();
 
-        log.info("KIS access token issued, valid until {}", expiresAt);
-        log.info("KIS access token: {}", accessToken);
+        log.info("[Auth] 액세스 토큰이 발급되었습니다. \naccessToken: {} \n{} 까지 유효합니다.", accessToken, expiresAt);
     }
 
-    @Scheduled(fixedDelay = 23 * 60 * 60 * 1000) // 23시간마다
+    @Scheduled(fixedDelay = 23 * 60 * 60 * 1000)    // 23시간마다 갱신
     public void scheduledRefresh() {
         refreshToken();
     }
 
-    public synchronized void forceRefresh() { // 강제 갱신
-        log.warn("[KIS] Manual token refresh requested by admin/service");
+    public synchronized void forceRefresh() {       // 강제 갱신
+        log.warn("[Auth] 액세스 토큰이 강제 갱신됩니다.");
         refreshToken();
     }
 }
