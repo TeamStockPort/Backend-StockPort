@@ -1,76 +1,76 @@
 package com.stockport.server.domain.stock.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Table(name = "stock_price")
 public class StockPrice {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto Increment
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "stock_isinCd", nullable = false)
-    private Stock stock; // Stock 엔티티와의 다대일 관계
+    @JoinColumn(name = "stock_id", nullable = false)
+    private Stock stock;
 
-    @Column(name = "basDt", nullable = false)
-    private LocalDate basDt; // 기준일자
+    @Column(nullable = false)
+    private LocalDate baseDate; // 기준일
 
-    private Integer clpr; // 종가
-    private Integer mkp; // 시가
-    private Integer hipr; // 고가
-    private Integer lopr; // 저가
-    private Integer vs; // 전일 대비 등락
+    @Column(nullable = false)
+    private Integer openPrice;  // 시가
 
-    @Column(name = "fltRt", precision = 5, scale = 2)
-    private BigDecimal fltRt; // 등락률 (소수 둘째 자리까지)
+    @Column(nullable = false)
+    private Integer closePrice; // 종가
 
-    private Long mrktTotAmt; // 시가총액
-    private Long trqu;     // 거래량
-    private Long trPrc;      // 거래대금
-    private Long lstgStCnt;    // 상장주식수
+    @Column(nullable = false)
+    private Integer highPrice;  // 고가
+
+    @Column(nullable = false)
+    private Integer lowPrice;   // 저가
+
+    @Column(nullable = false)
+    private Integer changeAmount;   // 등락폭
+
+    @Column(precision = 5, scale = 2)
+    private BigDecimal changeRate;  // 등락률
 
     @Builder
-    private StockPrice(Stock stock, LocalDate basDt, Integer clpr, Integer mkp, Integer hipr, Integer lopr, Integer vs, BigDecimal fltRt, Long mrktTotAmt, Long trqu, Long trPrc, Long lstgStCnt) {
+    public StockPrice(Stock stock, LocalDate baseDate,
+                      Integer openPrice, Integer closePrice, Integer highPrice,
+                      Integer lowPrice, Integer changeAmount, BigDecimal changeRate) {
         this.stock = stock;
-        this.basDt = basDt;
-        this.clpr = clpr;
-        this.mkp = mkp;
-        this.hipr = hipr;
-        this.lopr = lopr;
-        this.vs = vs;
-        this.fltRt = fltRt;
-        this.mrktTotAmt = mrktTotAmt;
-        this.trqu = trqu;
-        this.trPrc = trPrc;
-        this.lstgStCnt = lstgStCnt;
+        this.baseDate = baseDate;
+        this.openPrice = openPrice;
+        this.closePrice = closePrice;
+        this.highPrice = highPrice;
+        this.lowPrice = lowPrice;
+        this.changeAmount = changeAmount;
+        this.changeRate = changeRate;
     }
 
-    public static StockPrice create(Stock stock, LocalDate basDt, Integer clpr, Integer mkp, Integer hipr, Integer lopr, Integer vs, BigDecimal fltRt, Long mrktTotAmt, Long trqu, Long trPrc, Long lstgStCnt) {
+
+    public static StockPrice create(Stock stock, LocalDate baseDate,
+                                Integer closePrice, Integer openPrice, Integer highPrice,
+                                Integer lowPrice, Integer changeAmount, BigDecimal changeRate) {
         return StockPrice.builder()
                 .stock(stock)
-                .basDt(basDt)
-                .clpr(clpr)
-                .mkp(mkp)
-                .hipr(hipr)
-                .lopr(lopr)
-                .vs(vs)
-                .fltRt(fltRt)
-                .mrktTotAmt(mrktTotAmt)
-                .trqu(trqu)
-                .trPrc(trPrc)
-                .lstgStCnt(lstgStCnt)
+                .baseDate(baseDate)
+                .openPrice(openPrice)
+                .closePrice(closePrice)
+                .highPrice(highPrice)
+                .lowPrice(lowPrice)
+                .changeAmount(changeAmount)
+                .changeRate(changeRate)
                 .build();
     }
 }

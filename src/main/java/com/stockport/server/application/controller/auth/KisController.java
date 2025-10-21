@@ -1,6 +1,7 @@
 package com.stockport.server.application.controller.auth;
 
 import com.stockport.server.application.service.auth.KisAuthService;
+import com.stockport.server.global.apipayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +16,8 @@ public class KisController {
     private final KisAuthService kisAuthService;
 
     @PostMapping("/token/refresh")
-    public ResponseEntity<String> refreshTokenManually() {
+    public ApiResponse<String> refreshTokenManually() {
         kisAuthService.forceIssueNewToken();
-        return ResponseEntity.ok("Access token reissued successfully.");
+        return ApiResponse.onSuccess("KIS token refreshed successfully.");
     }
 }

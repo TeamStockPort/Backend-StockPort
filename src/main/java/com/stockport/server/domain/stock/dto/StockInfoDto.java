@@ -25,7 +25,7 @@ public class StockInfoDto {
         return StockInfoDto.builder()
                 .isinCd(stock.getIsinCd())
                 .stockCd(stock.getStockCd())
-                .name(stock.getName())
+                .name(stock.getStockName())
                 .marketCap(stock.getMarketCap())
                 .listedShares(stock.getListedShares())
                 .listedDate(stock.getListedDate())
