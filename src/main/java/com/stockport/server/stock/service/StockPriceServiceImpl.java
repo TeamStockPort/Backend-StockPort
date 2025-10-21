@@ -6,8 +6,7 @@ import com.stockport.server.stock.domain.StockPrice;
 import com.stockport.server.stock.dto.StockPriceDto;
 import com.stockport.server.stock.repository.StockPriceRepository;
 import com.stockport.server.stock.repository.StockRepository;
-import de.jollyday.HolidayManager;
-import de.jollyday.ManagerParameters;
+import de.focus_shift.jollyday.core.HolidayManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +20,9 @@ public class StockPriceServiceImpl implements StockPriceService {
     private final StockPriceApiClient stockPriceApiClient;
     private final StockPriceRepository stockPriceRepository;
     private final StockRepository stockRepository;
-    private final HolidayManager holidayManager;
 
     @Override
     public void fetchAndSaveStockPricesByBasDt(LocalDate basDt) {
-        if (holidayManager.isHoliday(basDt) || basDt.getDayOfWeek().getValue() >= 6) { // 주말, 공휴일인 경우
-            return;
-        }
-
         var stockPrices = stockPriceApiClient.getAllStockPricesByDate(basDt.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
         for (var dto : stockPrices) {

@@ -41,8 +41,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	// jollyday
-	implementation 'de.jollyday:jollyday:0.5.10'
+	// Jollyday
+	implementation 'de.focus-shift:jollyday-core:1.5.6'
+	implementation 'de.focus-shift:jollyday-jaxb:1.5.6'
 }
 
 tasks.named('test') {

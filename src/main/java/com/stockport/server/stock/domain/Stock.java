@@ -15,45 +15,57 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Stock {
     @Id
-    @Column(name = "isinCd", length = 20, nullable = false)
+    @Column(name = "ISIN_CD", length = 20, nullable = false)
     private String isinCd;   // 종목 식별 고유번호 (PK)
 
-    @Column(name = "srtnCd", length = 9, nullable = false)
-    private String srtnCd;   // 단축코드
+    @Column(name = "STOCK_CD", length = 9, nullable = false)
+    private String stockCd;  // 단축코드
 
-    @Column(name = "itmsNm", length = 240, nullable = false)
-    private String itmsNm;   // 종목명
+    @Column(name = "STOCK_NAME", length = 100, nullable = false)
+    private String name;   // 종목명
 
-    @Column(name = "mrktCtg", length = 10, nullable = false)
-    private String mrktCtg;  // 시장 구분 (KOSPI/KOSDAQ/KONEX)
+    @Column(name = "MARKET_CAP", nullable = false)
+    private Long marketCap; // 시가총액
 
-    @Column(name = "enpNm", length = 240)
-    private String enpNm;    // 회사명
+    @Column(name = "LISTED_DATE", nullable = false)
+    private LocalDate listedDate; // 상장일
 
-    @Column(name = "crno", length = 240)
-    private String crno; // 법인명
+    @Column(name = "LISTED_SHARES", nullable = false)
+    private Long listedShares; // 상장주식수
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StockPrice> stockPrices; // StockPrice 엔티티와의 일대다 관계
 
-    @Builder
-    private Stock(String isinCd, String srtnCd, String itmsNm, String mrktCtg, String enpNm, String crno) {
-        this.isinCd = isinCd;
-        this.srtnCd = srtnCd;
-        this.itmsNm = itmsNm;
-        this.mrktCtg = mrktCtg;
-        this.enpNm = enpNm;
-        this.crno = crno;
+    public void updateMarketCap() {
+        if (stockPrices == null || stockPrices.isEmpty()) {
+            return;
+        }
+
+        StockPrice latestPrice = stockPrices.stream()
+                .max((sp1, sp2) -> sp1.getBasDt().compareTo(sp2.getBasDt()))
+                .orElse(null);
+
+        this.marketCap = latestPrice.getClpr().longValue() * this.listedShares;
     }
 
-    public static Stock create(String isinCd, String srtnCd, String itmsNm, String mrktCtg, String enpNm, String crno) {
+    @Builder
+    public Stock(String isinCd, String stockCd, String name, Long marketCap, Long listedShares, LocalDate listedDate) {
+        this.isinCd = isinCd;
+        this.stockCd = stockCd;
+        this.name = name;
+        this.marketCap = marketCap;
+        this.listedShares = listedShares;
+        this.listedDate = listedDate;
+    }
+
+    public static Stock create(String isinCd, String stockCd, String name, Long marketCap, Long listedShares, LocalDate listedDate) {
         return Stock.builder()
                 .isinCd(isinCd)
-                .srtnCd(srtnCd)
-                .itmsNm(itmsNm)
-                .mrktCtg(mrktCtg)
-                .enpNm(enpNm)
-                .crno(crno)
+                .stockCd(stockCd)
+                .name(name)
+                .marketCap(marketCap)
+                .listedShares(listedShares)
+                .listedDate(listedDate)
                 .build();
     }
 }

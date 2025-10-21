@@ -4,8 +4,7 @@ import com.stockport.server.stock.client.StockApiClient;
 import com.stockport.server.stock.domain.Stock;
 import com.stockport.server.stock.dto.StockInfoDto;
 import com.stockport.server.stock.repository.StockRepository;
-import de.jollyday.HolidayManager;
-import de.jollyday.ManagerParameters;
+import de.focus_shift.jollyday.core.HolidayManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,15 +23,10 @@ import static java.util.stream.Collectors.toSet;
 public class StockServiceImpl implements StockService {
     private final StockRepository stockRepository;
     private final StockApiClient stockApiClient;
-    private final HolidayManager holidayManager;
 
     @Override
     public void fetchAndStoreStocks() {
         LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
-        if (holidayManager.isHoliday(today) || today.getDayOfWeek().getValue() >= 6) { // 주말, 공휴일인 경우
-            log.info("Today is a holiday or weekend. Skipping stock data fetch.");
-            return;
-        }
 
         String baseDt = today.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         var stockInfos = stockApiClient.fetchAllByBasDT(baseDt);
