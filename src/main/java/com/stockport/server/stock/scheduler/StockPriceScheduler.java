@@ -1,7 +1,6 @@
 package com.stockport.server.stock.scheduler;
 
 import com.stockport.server.stock.service.StockPriceService;
-import de.focus_shift.jollyday.core.HolidayManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

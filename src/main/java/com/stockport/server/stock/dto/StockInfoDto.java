@@ -1,38 +1,46 @@
 package com.stockport.server.stock.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.stockport.server.stock.domain.Stock;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class StockInfoDto {
-    private String srtnCd;
-    private String isinCd;
-    private String mrktCtg;
-    private String itmsNm;
-    private String crno;
-    private String corpNm;
 
-    @Builder
-    public StockInfoDto(String srtnCd, String isinCd, String mrktCtg, String itmsNm, String crno, String corpNm) {
-        this.srtnCd = srtnCd;
-        this.isinCd = isinCd;
-        this.mrktCtg = mrktCtg;
-        this.itmsNm = itmsNm;
-        this.crno = crno;
-        this.corpNm = corpNm;
+    private String isinCd;        // 종목 식별 고유번호
+    private String stockCd;       // 단축코드
+    private String name;          // 종목명
+    private Long marketCap;       // 시가총액
+    private Long listedShares;    // 상장주식수
+    private LocalDate listedDate; // 상장일
+
+    public static StockInfoDto fromEntity(Stock stock) {
+        return StockInfoDto.builder()
+                .isinCd(stock.getIsinCd())
+                .stockCd(stock.getStockCd())
+                .name(stock.getName())
+                .marketCap(stock.getMarketCap())
+                .listedShares(stock.getListedShares())
+                .listedDate(stock.getListedDate())
+                .build();
     }
 
-    public static Stock toEntity(StockInfoDto dto) {
+    public Stock toEntity() {
         return Stock.builder()
-                .isinCd(dto.getIsinCd())
-                .srtnCd(dto.getSrtnCd())
-                .itmsNm(dto.getItmsNm())
-                .mrktCtg(dto.getMrktCtg())
-                .crno(dto.getCrno())
-                .enpNm(dto.getCorpNm())
+                .isinCd(this.isinCd)
+                .stockCd(this.stockCd)
+                .name(this.name)
+                .marketCap(this.marketCap)
+                .listedShares(this.listedShares)
+                .listedDate(this.listedDate)
                 .build();
     }
 }
