@@ -36,7 +36,7 @@ public class StockInfoDto {
         return Stock.builder()
                 .isinCd(this.isinCd)
                 .stockCd(this.stockCd)
-                .name(this.name)
+                .stockName(this.name)
                 .marketCap(this.marketCap)
                 .listedShares(this.listedShares)
                 .listedDate(this.listedDate)

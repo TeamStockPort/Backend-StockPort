@@ -3,7 +3,6 @@ package com.stockport.server.application.controller.auth;
 import com.stockport.server.application.service.auth.KisAuthService;
 import com.stockport.server.global.apipayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
