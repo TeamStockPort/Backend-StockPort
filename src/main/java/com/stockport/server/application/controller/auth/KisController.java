@@ -17,6 +17,6 @@ public class KisController {
     @PostMapping("/token/refresh")
     public ApiResponse<String> refreshTokenManually() {
         kisAuthService.forceIssueNewToken();
-        return ApiResponse.onSuccess("KIS token refreshed successfully.");
+        return ApiResponse.onSuccess("한국투자증권 토큰이 갱신되었습니다.");
     }
 }
