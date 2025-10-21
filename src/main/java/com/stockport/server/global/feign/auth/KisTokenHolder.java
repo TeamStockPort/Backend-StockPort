@@ -1,5 +1,6 @@
 package com.stockport.server.global.feign.auth;
 
+import com.stockport.server.global.feign.config.KisProperties;
 import com.stockport.server.global.feign.dto.KisTokenResponse;
 import com.stockport.server.global.feign.client.KisAuthClient;
 import jakarta.annotation.PostConstruct;
@@ -49,19 +50,6 @@ public class KisTokenHolder {
                 .atZone(ZoneId.of("Asia/Seoul"))
                 .toInstant();
 
-//        String expiresValue = response.getExpiresIn();
-//
-//        try {
-//            // 숫자형 (초 단위)인 경우
-//            long expiresInSec = Long.parseLong(expiresValue);
-//            this.expiresAt = Instant.now().plus(expiresInSec - 300, ChronoUnit.SECONDS);
-//        } catch (NumberFormatException e) {
-//            // 날짜 문자열인 경우
-//            this.expiresAt = Instant.parse(
-//                    expiresValue.replace(" ", "T") + "Z"
-//            );
-//        }
-//
         log.info("KIS access token issued, valid until {}", expiresAt);
         log.info("KIS access token: {}", accessToken);
     }

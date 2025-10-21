@@ -31,29 +31,31 @@ public class Stock {
     @Column(name = "LISTED_SHARES", nullable = false)
     private Long listedShares; // 상장주식수
 
+    @Column(name = "CUR_PRICE")
+    private Long price;
+
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StockPrice> stockPrices; // StockPrice 엔티티와의 일대다 관계
 
-    public void updateMarketCap() {
-        if (stockPrices == null || stockPrices.isEmpty()) {
-            return;
-        }
+    public Stock updatePrice(Long price) {
+        this.price = price;
+        return this;
+    }
 
-        StockPrice latestPrice = stockPrices.stream()
-                .max((sp1, sp2) -> sp1.getBasDt().compareTo(sp2.getBasDt()))
-                .orElse(null);
-
-        this.marketCap = latestPrice.getClpr().longValue() * this.listedShares;
+    public Stock updateMarketCap() {
+        this.marketCap = price * this.listedShares;
+        return this;
     }
 
     @Builder
-    public Stock(String isinCd, String stockCd, String name, Long marketCap, Long listedShares, LocalDate listedDate) {
+    public Stock(String isinCd, String stockCd, String name, Long marketCap, Long listedShares, LocalDate listedDate, Long price) {
         this.isinCd = isinCd;
         this.stockCd = stockCd;
         this.name = name;
         this.marketCap = marketCap;
         this.listedShares = listedShares;
         this.listedDate = listedDate;
+        this.price = price;
     }
 
     public static Stock create(String isinCd, String stockCd, String name, Long marketCap, Long listedShares, LocalDate listedDate) {

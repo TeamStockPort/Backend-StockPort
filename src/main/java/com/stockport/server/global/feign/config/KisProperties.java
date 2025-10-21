@@ -1,4 +1,4 @@
-package com.stockport.server.global.feign.auth;
+package com.stockport.server.global.feign.config;
 
 import lombok.Getter;
 import lombok.Setter;

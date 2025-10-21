@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
-@FeignClient(name = "kisAuthClient", url = "${kis.base-url}")
+@FeignClient(
+        name = "kisAuthClient",
+        url = "${kis.base-url}"
+)
 public interface KisAuthClient {
     @PostMapping(value = "/oauth2/tokenP", consumes = "application/json")
     KisTokenResponse issueToken(@RequestBody Map<String, String> body);
