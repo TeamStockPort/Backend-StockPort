@@ -11,3 +11,10 @@ kis:
   base-url: https://openapivts.koreainvestment.com:29443
   app-key: PSLB72T1zvI2fQrJIulELY9axGlRC5aBndFk
   app-secret: MDRuRWK/y1AwbQIdHTywOsQPxTsXm0hl/FlDYYOrunC38Ob1HP810jQub3jrTwOFeX/bIspJ5j2MgO36PLBiNLJ7FPYSXAjkc82y4mUbhEmOMlREJl95CxkeuMRHKrKzIQnjbTxBNqUq/xWISWbs7bYr0o23YOIDru0nHi/ZeJ3jaBerzSs=
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000
