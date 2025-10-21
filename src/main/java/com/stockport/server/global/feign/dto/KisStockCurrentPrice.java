@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 @NoArgsConstructor
-public class KisStockPriceResponse {
+public class KisStockCurrentPrice {
     @JsonProperty("stck_bsop_date")
     private String baseDate;        // 기준일 (YYYYMMDD)
 
@@ -21,7 +21,7 @@ public class KisStockPriceResponse {
     private String openPrice;       // 시가
 
     @JsonProperty("stck_prpr")
-    private String closePrice;      // 종가
+    private String currentPrice;    // 현재가
 
     @JsonProperty("stck_hgpr")
     private String highPrice;       // 고가
@@ -63,7 +63,7 @@ public class KisStockPriceResponse {
         return StockPrice.builder()
                 .baseDate(parseDateSafe(this.baseDate))
                 .openPrice(parseIntSafe(this.openPrice))
-                .closePrice(parseIntSafe(this.closePrice))
+                .closePrice(parseIntSafe(this.currentPrice))
                 .highPrice(parseIntSafe(this.highPrice))
                 .lowPrice(parseIntSafe(this.lowPrice))
                 .changeAmount(parseIntSafe(this.changeAmount))

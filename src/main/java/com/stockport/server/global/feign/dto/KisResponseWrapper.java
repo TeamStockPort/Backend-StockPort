@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @NoArgsConstructor
-public class KisStockPeriodPriceResponse {
+public class KisResponseWrapper<T> {
+
     @JsonProperty("rt_cd")
     private String resultCode;
 
@@ -19,5 +18,5 @@ public class KisStockPeriodPriceResponse {
     private String message;
 
     @JsonProperty("output")
-    private List<KisStockPriceResponse> stockPriceList;
+    private T output;
 }
