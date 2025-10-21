@@ -1,4 +1,4 @@
-package com.stockport.server.global.feign.service;
+package com.stockport.server.application.service.auth;
 
 import com.stockport.server.global.feign.auth.KisTokenHolder;
 import lombok.RequiredArgsConstructor;

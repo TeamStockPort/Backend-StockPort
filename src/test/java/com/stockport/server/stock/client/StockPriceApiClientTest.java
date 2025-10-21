@@ -1,6 +1,6 @@
 package com.stockport.server.stock.client;
 
-import com.stockport.server.stock.dto.StockPriceDto;
+import com.stockport.server.domain.stock.dto.StockPriceDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

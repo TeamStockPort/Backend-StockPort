@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@EnableFeignClients(basePackages = "com.stockport.server.feign")
+@EnableFeignClients(basePackages = "com.stockport.server")
 public class ServerApplication {
 
 	public static void main(String[] args) {

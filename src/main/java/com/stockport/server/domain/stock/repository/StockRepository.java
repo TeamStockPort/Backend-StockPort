@@ -1,6 +1,6 @@
-package com.stockport.server.stock.repository;
+package com.stockport.server.domain.stock.repository;
 
-import com.stockport.server.stock.domain.Stock;
+import com.stockport.server.domain.stock.entity.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

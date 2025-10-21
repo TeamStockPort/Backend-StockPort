@@ -1,4 +1,4 @@
-package com.stockport.server.stock.domain;
+package com.stockport.server.domain.stock.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

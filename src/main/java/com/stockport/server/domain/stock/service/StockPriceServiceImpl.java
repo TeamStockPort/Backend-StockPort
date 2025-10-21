@@ -1,16 +1,11 @@
-package com.stockport.server.stock.service;
+package com.stockport.server.domain.stock.service;
 
-import com.stockport.server.stock.domain.Stock;
-import com.stockport.server.stock.domain.StockPrice;
-import com.stockport.server.stock.dto.StockPriceDto;
-import com.stockport.server.stock.repository.StockPriceRepository;
-import com.stockport.server.stock.repository.StockRepository;
+import com.stockport.server.domain.stock.repository.StockPriceRepository;
+import com.stockport.server.domain.stock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

@@ -63,6 +63,7 @@ public class KisTokenHolder {
 //        }
 //
         log.info("KIS access token issued, valid until {}", expiresAt);
+        log.info("KIS access token: {}", accessToken);
     }
 
     @Scheduled(fixedDelay = 23 * 60 * 60 * 1000) // 23시간마다

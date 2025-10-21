@@ -1,6 +1,6 @@
 package com.stockport.server.client;
 
-import com.stockport.server.stock.dto.StockInfoDto;
+import com.stockport.server.domain.stock.dto.StockInfoDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

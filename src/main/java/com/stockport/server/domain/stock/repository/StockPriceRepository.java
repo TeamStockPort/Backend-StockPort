@@ -1,6 +1,6 @@
-package com.stockport.server.stock.repository;
+package com.stockport.server.domain.stock.repository;
 
-import com.stockport.server.stock.domain.StockPrice;
+import com.stockport.server.domain.stock.entity.StockPrice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StockPriceRepository extends JpaRepository<StockPrice, Long> {

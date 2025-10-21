@@ -1,4 +1,4 @@
-package com.stockport.server.stock.service;
+package com.stockport.server.domain.stock.service;
 
 import java.time.LocalDate;
 

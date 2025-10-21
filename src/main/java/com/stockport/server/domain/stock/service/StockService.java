@@ -1,4 +1,4 @@
-package com.stockport.server.stock.service;
+package com.stockport.server.domain.stock.service;
 
 public interface StockService {
     public void fetchAndStoreStocks();

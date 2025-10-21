@@ -1,6 +1,6 @@
-package com.stockport.server.stock.dto;
+package com.stockport.server.domain.stock.dto;
 
-import com.stockport.server.stock.domain.Stock;
+import com.stockport.server.domain.stock.entity.Stock;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class StockInfoDto {
-
     private String isinCd;        // 종목 식별 고유번호
     private String stockCd;       // 단축코드
     private String name;          // 종목명

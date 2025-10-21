@@ -1,6 +1,6 @@
-package com.stockport.server.global.feign.controller;
+package com.stockport.server.application.controller.auth;
 
-import com.stockport.server.global.feign.service.KisAuthService;
+import com.stockport.server.application.service.auth.KisAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

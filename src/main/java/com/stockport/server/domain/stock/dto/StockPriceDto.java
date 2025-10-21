@@ -1,8 +1,8 @@
-package com.stockport.server.stock.dto;
+package com.stockport.server.domain.stock.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.stockport.server.stock.domain.Stock;
-import com.stockport.server.stock.domain.StockPrice;
+import com.stockport.server.domain.stock.entity.Stock;
+import com.stockport.server.domain.stock.entity.StockPrice;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

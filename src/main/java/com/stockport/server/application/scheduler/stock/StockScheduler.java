@@ -1,6 +1,6 @@
-package com.stockport.server.stock.scheduler;
+package com.stockport.server.application.scheduler.stock;
 
-import com.stockport.server.stock.service.StockService;
+import com.stockport.server.domain.stock.service.StockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
