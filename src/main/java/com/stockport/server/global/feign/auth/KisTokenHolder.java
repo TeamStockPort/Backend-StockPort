@@ -1,8 +1,7 @@
-package com.stockport.server.feign.auth;
+package com.stockport.server.global.feign.auth;
 
-import com.stockport.server.feign.dto.KisTokenResponse;
-import com.stockport.server.feign.client.KisAuthClient;
-import com.stockport.server.feign.config.KisProperties;
+import com.stockport.server.global.feign.dto.KisTokenResponse;
+import com.stockport.server.global.feign.client.KisAuthClient;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 @Slf4j
@@ -27,17 +25,11 @@ public class KisTokenHolder {
     private volatile String accessToken;
     private volatile Instant expiresAt;
 
-    /**
-     * 애플리케이션 시작 시 바로 토큰 발급
-     */
     @PostConstruct
     public void init() {
         refreshToken();
     }
 
-    /**
-     * Access Token 반환 (만료 시 자동 갱신)
-     */
     public synchronized String getAccessToken() {
         if (accessToken == null || Instant.now().isAfter(expiresAt)) {
             refreshToken();
@@ -45,9 +37,6 @@ public class KisTokenHolder {
         return accessToken;
     }
 
-    /**
-     * 실제 토큰 발급 로직
-     */
     public synchronized void refreshToken() {
         KisTokenResponse response = kisAuthClient.issueToken(Map.of(
                 "grant_type", "client_credentials",
@@ -76,18 +65,12 @@ public class KisTokenHolder {
         log.info("KIS access token issued, valid until {}", expiresAt);
     }
 
-    /**
-     * 스케줄러로 23시간마다 자동 갱신
-     */
     @Scheduled(fixedDelay = 23 * 60 * 60 * 1000) // 23시간마다
     public void scheduledRefresh() {
         refreshToken();
     }
 
-    /**
-     * 외부에서 강제로 AccessToken 갱신을 요청할 때 사용
-     */
-    public synchronized void forceRefresh() {
+    public synchronized void forceRefresh() { // 강제 갱신
         log.warn("[KIS] Manual token refresh requested by admin/service");
         refreshToken();
     }

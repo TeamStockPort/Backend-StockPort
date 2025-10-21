@@ -1,4 +1,4 @@
-package com.stockport.server.feign.dto;
+package com.stockport.server.global.feign.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package com.stockport.server.feign.client;
+package com.stockport.server.global.feign.client;
 
-import com.stockport.server.feign.dto.KisTokenResponse;
+import com.stockport.server.global.feign.dto.KisTokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
