@@ -7,6 +7,7 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password: password
-api:
-  url: https://apis.data.go.kr/1160100/service/GetKrxListedInfoService/getItemInfo
-  key: c49c143982d14a55271e9cb2c0c6ffa4abd0e6eb9558bccb0ba7279906567552
+kis:
+  base-url: https://openapivts.koreainvestment.com:29443
+  app-key: PSLB72T1zvI2fQrJIulELY9axGlRC5aBndFk
+  app-secret: MDRuRWK/y1AwbQIdHTywOsQPxTsXm0hl/FlDYYOrunC38Ob1HP810jQub3jrTwOFeX/bIspJ5j2MgO36PLBiNLJ7FPYSXAjkc82y4mUbhEmOMlREJl95CxkeuMRHKrKzIQnjbTxBNqUq/xWISWbs7bYr0o23YOIDru0nHi/ZeJ3jaBerzSs=
