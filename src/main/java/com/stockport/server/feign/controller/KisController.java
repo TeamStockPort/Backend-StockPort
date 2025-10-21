@@ -2,7 +2,8 @@ package com.stockport.server.feign.controller;
 
 import com.stockport.server.feign.service.KisAuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,8 +14,9 @@ public class KisController {
 
     private final KisAuthService kisAuthService;
 
-    @GetMapping("/token")
-    public String getToken() {
-        return kisAuthService.getAccessToken();
+    @PostMapping("/token/refresh")
+    public ResponseEntity<String> refreshTokenManually() {
+        kisAuthService.forceIssueNewToken();
+        return ResponseEntity.ok("Access token reissued successfully.");
     }
 }
