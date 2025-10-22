@@ -1,5 +1,6 @@
 package com.stockport.server.domain.stock.entity;
 
+import com.stockport.server.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,9 +12,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Table(name = "stock_price")
-public class StockPrice {
+public class StockPrice extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,7 +56,6 @@ public class StockPrice {
         this.changeAmount = changeAmount;
         this.changeRate = changeRate;
     }
-
 
     public static StockPrice create(Stock stock, LocalDate baseDate,
                                 Integer closePrice, Integer openPrice, Integer highPrice,

@@ -1,13 +1,16 @@
 package com.stockport.server.global.feign.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class KisResponseWrapper<T> {
-
+@AllArgsConstructor
+@Builder
+public class KisStockCurrentPriceWrapper {
     @JsonProperty("rt_cd")
     private String resultCode;
 
@@ -18,5 +21,5 @@ public class KisResponseWrapper<T> {
     private String message;
 
     @JsonProperty("output")
-    private T output;
+    private KisStockCurrentPrice stockCurrentPrice;
 }
