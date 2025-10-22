@@ -1,7 +1,5 @@
 package com.stockport.server.global.feign.auth;
 
-import com.stockport.server.global.apipayload.code.status.ErrorStatus;
-import com.stockport.server.global.exception.GeneralException;
 import com.stockport.server.global.feign.config.KisProperties;
 import com.stockport.server.global.feign.dto.KisTokenResponse;
 import com.stockport.server.global.feign.client.KisAuthClient;
@@ -70,5 +68,13 @@ public class KisTokenHolder {
     public synchronized void forceRefresh() {       // 강제 갱신
         log.warn("[Auth] 액세스 토큰이 강제 갱신됩니다.");
         refreshToken();
+    }
+
+    public String getAppKey() {
+        return kisProperties.getAppKey();
+    }
+
+    public String getAppSecret() {
+        return kisProperties.getAppSecret();
     }
 }

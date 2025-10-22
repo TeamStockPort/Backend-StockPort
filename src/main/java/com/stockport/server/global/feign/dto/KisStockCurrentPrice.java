@@ -1,9 +1,12 @@
 package com.stockport.server.global.feign.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.stockport.server.domain.stock.entity.Stock;
+import com.stockport.server.domain.stock.entity.StockCurrentPrice;
 import com.stockport.server.domain.stock.entity.StockPrice;
 import com.stockport.server.global.apipayload.code.status.ErrorStatus;
 import com.stockport.server.global.exception.GeneralException;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,15 +16,12 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 @NoArgsConstructor
-public class KisStockPriceResponse {
-    @JsonProperty("stck_bsop_date")
-    private String baseDate;        // 기준일 (YYYYMMDD)
-
+public class KisStockCurrentPrice {
     @JsonProperty("stck_oprc")
     private String openPrice;       // 시가
 
     @JsonProperty("stck_prpr")
-    private String closePrice;      // 종가
+    private String currentPrice;    // 현재가
 
     @JsonProperty("stck_hgpr")
     private String highPrice;       // 고가
@@ -34,14 +34,6 @@ public class KisStockPriceResponse {
 
     @JsonProperty("prdy_ctrt")
     private String changeRate;      // 등락률
-
-    private LocalDate parseDateSafe(String dateStr) {
-        try {
-            return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyyMMdd"));
-        } catch (Exception e) {
-            throw new GeneralException(ErrorStatus.PARSE_ERROR);
-        }
-    }
 
     private Integer parseIntSafe(String val) {
         try {
@@ -59,15 +51,35 @@ public class KisStockPriceResponse {
         }
     }
 
-    public StockPrice toEntity() {
-        return StockPrice.builder()
-                .baseDate(parseDateSafe(this.baseDate))
+    public StockCurrentPrice toEntity() {
+        return StockCurrentPrice.builder()
                 .openPrice(parseIntSafe(this.openPrice))
-                .closePrice(parseIntSafe(this.closePrice))
+                .currentPrice(parseIntSafe(this.currentPrice))
                 .highPrice(parseIntSafe(this.highPrice))
                 .lowPrice(parseIntSafe(this.lowPrice))
                 .changeAmount(parseIntSafe(this.changeAmount))
                 .changeRate(parseDoubleSafe(this.changeRate))
+                .build();
+    }
+
+    @Builder
+    public KisStockCurrentPrice(String openPrice, String currentPrice, String highPrice, String lowPrice, String changeAmount, String changeRate) {
+        this.openPrice = openPrice;
+        this.currentPrice = currentPrice;
+        this.highPrice = highPrice;
+        this.lowPrice = lowPrice;
+        this.changeAmount = changeAmount;
+        this.changeRate = changeRate;
+    }
+
+    public static KisStockCurrentPrice create(String openPrice, String currentPrice, String highPrice, String lowPrice, String changeAmount, String changeRate) {
+        return KisStockCurrentPrice.builder()
+                .openPrice(openPrice)
+                .currentPrice(currentPrice)
+                .highPrice(highPrice)
+                .lowPrice(lowPrice)
+                .changeAmount(changeAmount)
+                .changeRate(changeRate)
                 .build();
     }
 }

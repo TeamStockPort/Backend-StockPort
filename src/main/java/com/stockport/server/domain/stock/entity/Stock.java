@@ -1,4 +1,5 @@
 package com.stockport.server.domain.stock.entity;
+import com.stockport.server.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Stock {
+public class Stock extends BaseEntity {
     @Id
     @Column(length = 20, nullable = false)
     private String isinCd;              // 종목 식별 고유번호
@@ -32,42 +33,37 @@ public class Stock {
     @Column(nullable = false)
     private Long listedShares;          // 상장주식수
 
-    @Column(nullable = false)
-    private Integer curPrice;           // 현재가
+    @OneToOne(mappedBy = "stock", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private StockCurrentPrice currentPriceInfo;     // 현재 주가 정보
 
-    @Column(nullable = false)
-    private LocalDateTime lastUpdate;   // 마지막 조회 시간
+    @OneToMany(mappedBy = "stock", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StockPrice> stockPrices;           // 과거 주가 정보
 
-    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StockPrice> stockPrices; // StockPrice 엔티티와의 일대다 관계
+    public void updateCurrentPriceInfo(StockCurrentPrice newCurrentPriceInfo) {
+        if (this.currentPriceInfo != null)
+            this.currentPriceInfo.updateStock(null);
 
-    public Stock updateCurPrice(Integer curPrice) {
-        this.curPrice = curPrice;
+        this.currentPriceInfo = newCurrentPriceInfo;
+        newCurrentPriceInfo.updateStock(this);
+
         updateMarketCap();
-        updateTime();
-        return this;
     }
 
     public void updateMarketCap() {
-        this.marketCap = curPrice * this.listedShares;
-    }
-
-    public void updateTime() {
-        this.lastUpdate = LocalDateTime.now();
+        this.marketCap = currentPriceInfo.getCurrentPrice() * this.listedShares;
     }
 
     @Builder
-    public Stock(String isinCd, String stockCd, String stockName, Long marketCap, Long listedShares, LocalDate listedDate, Integer curPrice) {
+    public Stock(String isinCd, String stockCd, String stockName, Long marketCap, Long listedShares, LocalDate listedDate) {
         this.isinCd = isinCd;
         this.stockCd = stockCd;
         this.stockName = stockName;
         this.marketCap = marketCap;
         this.listedShares = listedShares;
         this.listedDate = listedDate;
-        this.curPrice = curPrice;
     }
 
-    public static Stock create(String isinCd, String stockCd, String stockName, Long marketCap, Long listedShares, LocalDate listedDate, Integer curPrice) {
+    public static Stock create(String isinCd, String stockCd, String stockName, Long marketCap, Long listedShares, LocalDate listedDate) {
         return Stock.builder()
                 .isinCd(isinCd)
                 .stockCd(stockCd)
@@ -75,7 +71,6 @@ public class Stock {
                 .marketCap(marketCap)
                 .listedShares(listedShares)
                 .listedDate(listedDate)
-                .curPrice(curPrice)
                 .build();
     }
 }
