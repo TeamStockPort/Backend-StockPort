@@ -1,18 +1,7 @@
 package com.stockport.server.global.feign.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stockport.server.global.feign.auth.KisTokenHolder;
-import com.stockport.server.global.feign.dto.KisStockCurrentPriceWrapper;
-import com.stockport.server.global.feign.dto.KisStockCurrentPrice;
-import com.stockport.server.global.feign.dto.KisStockPeriodPrice;
-import com.stockport.server.global.feign.dto.KisStockPeriodPriceWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

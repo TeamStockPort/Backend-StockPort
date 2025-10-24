@@ -3,10 +3,11 @@ package com.stockport.server.global.feign.adaptor;
 import com.stockport.server.global.apipayload.code.status.ErrorStatus;
 import com.stockport.server.global.exception.GeneralException;
 import com.stockport.server.global.feign.client.KisStockPriceClient;
-import com.stockport.server.global.feign.dto.KisStockCurrentPriceWrapper;
+import com.stockport.server.global.feign.dto.KisStockPeriodPrice;
+import com.stockport.server.global.feign.dto.wrapper.KisResponseWrapper;
 import com.stockport.server.global.feign.dto.KisStockCurrentPrice;
 import com.stockport.server.global.feign.auth.KisTokenHolder;
-import com.stockport.server.global.feign.dto.KisStockPeriodPriceWrapper;
+import com.stockport.server.global.feign.dto.wrapper.KisPeriodResponseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ public class KisStockPriceAdaptor {
 
             String token = "Bearer " + tokenHolder.getAccessToken();
 
-            KisStockCurrentPriceWrapper response = kisStockPriceClient.getStockPrice(
+            KisResponseWrapper<KisStockCurrentPrice> response = kisStockPriceClient.getStockPrice(
                     "application/json; charset=utf-8",
                     token,
                     tokenHolder.getAppKey(),
@@ -41,7 +42,7 @@ public class KisStockPriceAdaptor {
                 throw new GeneralException(ErrorStatus.FEIGN_ERROR);
             }
 
-            KisStockCurrentPrice price = response.getStockCurrentPrice();
+            KisStockCurrentPrice price = response.getOutput();
             log.info("[KIS] 주가 조회 성공: {} / 현재가 {}", stockCode, price.getCurrentPrice());
             return price;
 
@@ -51,13 +52,13 @@ public class KisStockPriceAdaptor {
         }
     }
 
-    public KisStockPeriodPriceWrapper getStockPeriodPrice(String stockCode, LocalDate startDate, LocalDate endDate) {
+    public KisPeriodResponseWrapper<KisStockCurrentPrice, KisStockPeriodPrice> getStockPeriodPrice(String stockCode, LocalDate startDate, LocalDate endDate) {
         try {
             log.info("[KIS] 기간별 주가 조회 요청: {} ({} ~ {})", stockCode, startDate, endDate);
 
             String token = "Bearer " + tokenHolder.getAccessToken();
 
-            KisStockPeriodPriceWrapper response = kisStockPriceClient.getPeriodPrice(
+            var response = kisStockPriceClient.getPeriodPrice(
                     "application/json; charset=utf-8",
                     token,
                     tokenHolder.getAppKey(),
