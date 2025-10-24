@@ -5,8 +5,6 @@ plugins {
 }
 
 group = 'com.stockport'
-version = '0.0.1-SNAPSHOT'
-description = 'stockport backend server'
 
 java {
 	toolchain {
@@ -19,8 +17,7 @@ repositories {
 }
 
 ext {
-	// Spring Cloud 릴리즈 트레인 명시
-	set('springCloudVersion', "2024.0.0")  // 예시로 최신 릴리즈 트레인 사용
+	set('springCloudVersion', "2024.0.0") // Spring Cloud 릴리즈 트레인 명시
 }
 
 dependencyManagement {
@@ -31,20 +28,29 @@ dependencyManagement {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// DB
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'com.h2database:h2'
 
 	// Feign Client
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'io.github.resilience4j:resilience4j-spring-boot3'
 
-	// 기타 라이브러리
+	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
-	runtimeOnly 'com.h2database:h2'
+	// swagger
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.7.0'
+
+	// 테스트
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
+
 }
 
 test {
