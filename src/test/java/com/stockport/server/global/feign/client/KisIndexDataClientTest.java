@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @SpringBootTest
-class KisIndexClientTest {
+class KisIndexDataClientTest {
 
     @Autowired
     private KisIndexClient kisIndexClient;
