@@ -2,6 +2,7 @@ package com.stockport.server.global.feign.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stockport.server.IntegrationTestSupport;
 import com.stockport.server.global.feign.auth.KisTokenHolder;
 import com.stockport.server.global.feign.dto.KisIndexCurrentPrice;
 import com.stockport.server.global.feign.dto.KisIndexPeriodPrice;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @SpringBootTest
-class KisIndexDataClientTest {
+class KisIndexDataClientTest extends IntegrationTestSupport {
 
     @Autowired
     private KisIndexClient kisIndexClient;
@@ -31,7 +32,7 @@ class KisIndexDataClientTest {
     @DisplayName("KIS 인덱스(코스피) 조회 API를 실제 호출한다")
     void getKospiIndexPrice() throws JsonProcessingException {
         // given
-        String token = tokenHolder.getAccessToken();
+        String token = "Bearer " + tokenHolder.getAccessToken();
         String appKey = tokenHolder.getAppKey();
         String appSecret = tokenHolder.getAppSecret();
 
@@ -86,8 +87,8 @@ class KisIndexDataClientTest {
         String marketCode = "U";          // 업종 구분 (U)
         String indexCode = "0001";        // 코스피
         String periodDivCode = "D";       // D: 일별
-        String startDate = "20251010";
-        String endDate = "20251001";
+        String startDate = "20251001";
+        String endDate = "20251010";
 
         // when
         KisPeriodResponseWrapper<KisIndexCurrentPrice, KisIndexPeriodPrice> response =
@@ -117,11 +118,9 @@ class KisIndexDataClientTest {
         if (dataList != null && !dataList.isEmpty()) {
             log.info("📊 [KOSPI 업종 기간별 시세 조회 결과]");
             for (KisIndexPeriodPrice data : dataList) {
-                log.info("일자: {}, 종가: {}, 등락폭: {}, 등락률: {}%",
+                log.info("일자: {}, 종가: {}",
                         data.getBaseDate(),
-                        data.getClosePrice(),
-                        data.getChangeAmount(),
-                        data.getChangeRate()
+                        data.getClosePrice()
                 );
             }
         } else {

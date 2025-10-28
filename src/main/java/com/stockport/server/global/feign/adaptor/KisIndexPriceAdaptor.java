@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -54,7 +55,7 @@ public class KisIndexPriceAdaptor {
         }
     }
 
-    public KisPeriodResponseWrapper<?, KisIndexPeriodPrice> getIndexPeriodPrice(String indexCode, LocalDate startDate, LocalDate endDate) {
+    public List<KisIndexPeriodPrice> getIndexPeriodPrice(String indexCode, LocalDate startDate, LocalDate endDate) {
         try {
             log.info("[KIS] 업종 기간별 시세 조회 요청: indexCode={}, start={}, end={}",
                     indexCode, startDate, endDate);
@@ -85,7 +86,7 @@ public class KisIndexPriceAdaptor {
             log.info("[KIS] 업종 기간별 시세 조회 성공: indexCode={}, 데이터 개수={}",
                     indexCode, response.getOutput2() != null ? response.getOutput2().size() : 0);
 
-            return response;
+            return response.getOutput2();
 
         } catch (Exception e) {
             log.error("[KIS] 업종 기간별 시세 조회 중 예외 발생 (indexCode={}): {}", indexCode, e.getMessage());

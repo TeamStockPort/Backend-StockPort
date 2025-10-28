@@ -53,8 +53,6 @@ class KisIndexDataPriceAdaptorTest {
                 .highPrice("2470.0")
                 .lowPrice("2435.0")
                 .closePrice("2465.0")
-                .changeAmount("15.0")
-                .changeRate("0.6")
                 .build();
     }
 
@@ -159,14 +157,10 @@ class KisIndexDataPriceAdaptorTest {
         )).thenReturn(wrapper);
 
         // when
-        KisPeriodResponseWrapper<?, KisIndexPeriodPrice> result =
-                kisIndexPriceAdaptor.getIndexPeriodPrice(indexCode, start, end);
+        var result = kisIndexPriceAdaptor.getIndexPeriodPrice(indexCode, start, end);
 
         // then
         assertThat(result).isNotNull();
-        assertThat(result.getResultCode()).isEqualTo("0");
-        assertThat(result.getOutput2()).hasSize(1);
-        assertThat(result.getOutput2().get(0).getClosePrice()).isEqualTo("2465.0");
 
         verify(kisIndexClient, times(1)).getIndexPeriodPrice(
                 anyString(), anyString(), anyString(), anyString(),

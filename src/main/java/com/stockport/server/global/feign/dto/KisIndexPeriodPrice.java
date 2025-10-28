@@ -1,7 +1,7 @@
 package com.stockport.server.global.feign.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.stockport.server.domain.index.entity.IndexData;
+import com.stockport.server.domain.indexData.entity.IndexData;
 import com.stockport.server.global.apipayload.code.status.ErrorStatus;
 import com.stockport.server.global.exception.GeneralException;
 import com.stockport.server.global.utils.KisParsingUtils;
@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Getter
 @Builder
@@ -33,32 +34,29 @@ public class KisIndexPeriodPrice {
     @JsonProperty("bstp_nmix_lwpr")
     private String lowPrice;        // 저가
 
-    @JsonProperty("prdy_vrss_sign")
-    private String changeSign;      // 등락부호
-
-    @JsonProperty("bstp_nmix_prdy_vrss")
-    private String changeAmount;    // 등락폭
-
-    @JsonProperty("bstp_nmix_prdy_ctrt")
-    private String changeRate;      // 등락률 (%)
-
-    private BigDecimal caculateSign(String sign, String decimal) {
-        BigDecimal bigDecimal = KisParsingUtils.parseDoubleSafe(decimal);
-        if (sign.equals("-")) {
-            return bigDecimal.negate();
-        }
-        return bigDecimal;
+    private BigDecimal caculateChangeAmount(String closePrice, BigDecimal prevClosePrice) {
+        BigDecimal clpr = KisParsingUtils.parseDoubleSafe(closePrice);
+        return clpr.subtract(prevClosePrice);
     }
 
-    public IndexData toEntity() {
+    private BigDecimal caculateChangeRate(String closePrice, BigDecimal prevClosePrice) {
+        try {
+            BigDecimal changeAmount = caculateChangeAmount(closePrice, prevClosePrice);
+            return changeAmount.multiply(BigDecimal.valueOf(100)).divide(prevClosePrice, 2, RoundingMode.HALF_UP);
+        } catch (Exception e) {
+            throw new GeneralException(ErrorStatus.PARSE_ERROR);
+        }
+    }
+
+    public IndexData toEntity(BigDecimal prevClosePrice) {
         return IndexData.builder()
                 .baseDate(KisParsingUtils.parseDateSafe(this.baseDate))
                 .closePrice(KisParsingUtils.parseDoubleSafe(this.closePrice))
                 .openPrice(KisParsingUtils.parseDoubleSafe(this.openPrice))
                 .highPrice(KisParsingUtils.parseDoubleSafe(this.highPrice))
                 .lowPrice(KisParsingUtils.parseDoubleSafe(this.lowPrice))
-                .changeAmount(caculateSign(this.changeSign, this.changeAmount))
-                .changeRate(caculateSign(this.changeSign, this.changeRate))
+                .changeAmount(caculateChangeAmount(this.closePrice, prevClosePrice))
+                .changeRate(caculateChangeRate(this.closePrice, prevClosePrice))
                 .build();
     }
 }

@@ -1,6 +1,7 @@
-package com.stockport.server.domain.index.entity;
+package com.stockport.server.domain.indexData.entity;
 
-import com.stockport.server.domain.index.constant.MarketType;
+import com.stockport.server.domain.indexData.constant.MarketType;
+import com.stockport.server.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,16 +20,16 @@ import java.time.LocalDate;
 @Table(
         name = "index_data",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uk_index_code_date", columnNames = {"indexCode", "baseDate"})
+                @UniqueConstraint(name = "uk_index_code_date", columnNames = {"marketType", "baseDate"})
         }
 )
-public class IndexData {
+public class IndexData extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private MarketType indexCode; // 코스피/코스닥 구분
+    private MarketType marketType; // 코스피/코스닥 구분
 
     @Column(nullable = false)
     private LocalDate baseDate; // 기준일
@@ -51,7 +52,18 @@ public class IndexData {
     @Column(precision = 5, scale = 2)
     private BigDecimal changeRate; // 등락률
 
-    public void updateIndexCode(MarketType indexCode) {
-        this.indexCode = indexCode;
+    public IndexData updateMarketType(MarketType marketType) {
+        this.marketType = marketType;
+        return this;
+    }
+
+    public IndexData updateClosePrice(BigDecimal currentPrice) {
+        this.closePrice = currentPrice;
+        return this;
+    }
+
+    public IndexData updateBaseDate(LocalDate baseDate) {
+        this.baseDate = baseDate;
+        return this;
     }
 }
