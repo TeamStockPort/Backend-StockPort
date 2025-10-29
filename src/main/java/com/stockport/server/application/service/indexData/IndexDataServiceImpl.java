@@ -43,14 +43,14 @@ public class IndexDataServiceImpl implements IndexDataService {
 
         List<KisIndexPeriodPrice> indexPeriodPriceList = new ArrayList<>();
 
-        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusYears(1)) {
+        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusMonths(1)) {
              indexPeriodPriceList.addAll(kisIndexPriceAdaptor.getIndexPeriodPrice(
                     marketType.getCode(),
                     date,
-                    date.plusYears(1).minusDays(1)
+                    date.plusMonths(1).minusDays(1)
              ));
              try {
-                 Thread.sleep(500);
+                 Thread.sleep(100);
              } catch (InterruptedException e) {
                  log.error("[KIS] 조회 대기 중 오류 발생");
              }
