@@ -1,5 +1,6 @@
 package com.stockport.server.domain.stock.entity;
 
+import com.stockport.server.IntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class StockTest {
+class StockTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("updateCurrentPriceInfo: 새로운 현재가 정보를 적용하면 기존 정보가 교체되고 시가총액이 갱신된다")

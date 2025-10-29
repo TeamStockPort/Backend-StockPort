@@ -1,5 +1,6 @@
 package com.stockport.server.global.feign.dto;
 
+import com.stockport.server.IntegrationTestSupport;
 import com.stockport.server.domain.stock.entity.StockCurrentPrice;
 import com.stockport.server.global.exception.GeneralException;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class KisStockCurrentPriceTest {
+class KisStockCurrentPriceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("toEntity: DTO를 StockCurrentPrice 엔티티로 정상 변환한다")
