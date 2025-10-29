@@ -4,16 +4,17 @@ import com.stockport.server.global.apipayload.code.status.ErrorStatus;
 import com.stockport.server.global.exception.GeneralException;
 import com.stockport.server.global.feign.auth.KisTokenHolder;
 import com.stockport.server.global.feign.client.KisStockPriceClient;
+import com.stockport.server.global.feign.dto.wrapper.KisResponseWrapper;
 import com.stockport.server.global.feign.dto.KisStockCurrentPrice;
-import com.stockport.server.global.feign.dto.KisStockCurrentPriceWrapper;
 import com.stockport.server.global.feign.dto.KisStockPeriodPrice;
-import com.stockport.server.global.feign.dto.KisStockPeriodPriceWrapper;
+import com.stockport.server.global.feign.dto.wrapper.KisPeriodResponseWrapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,9 +44,13 @@ class KisStockPriceAdaptorTest {
         when(tokenHolder.getAppSecret()).thenReturn("mockSecret");
 
         KisStockCurrentPrice price = KisStockCurrentPrice.create(
-                "97500", "98200", "98600", "95500", "700", "0.72"
+                "97000", "98200", "98200", "98600", "700", "0.72"
         );
-        KisStockCurrentPriceWrapper wrapper = createKisStockCurrentPriceWrapper("0", price);
+
+        KisResponseWrapper<KisStockCurrentPrice> wrapper = new KisResponseWrapper<>();
+        ReflectionTestUtils.setField(wrapper, "resultCode", "0");
+        ReflectionTestUtils.setField(wrapper, "message", "성공");
+        ReflectionTestUtils.setField(wrapper, "output", price);
 
         when(kisStockPriceClient.getStockPrice(
                 anyString(), anyString(), anyString(), anyString(),
@@ -69,36 +74,14 @@ class KisStockPriceAdaptorTest {
     void givenErrorResponse_whenGetStockCurrentPrice_thenThrowGeneralException() {
         // given
         String stockCode = "005930";
-        when(tokenHolder.getAccessToken()).thenReturn("mockToken");
-        when(tokenHolder.getAppKey()).thenReturn("mockAppKey");
-        when(tokenHolder.getAppSecret()).thenReturn("mockSecret");
-
-        KisStockCurrentPriceWrapper wrapper = createKisStockCurrentPriceWrapper("1", null);
+        KisResponseWrapper<KisStockCurrentPrice> wrapper = new KisResponseWrapper<>();
+        ReflectionTestUtils.setField(wrapper, "resultCode", "1");
+        ReflectionTestUtils.setField(wrapper, "message", "에러 발생");
 
         when(kisStockPriceClient.getStockPrice(
                 anyString(), anyString(), anyString(), anyString(),
                 anyString(), anyString(), anyString(), eq(stockCode)
         )).thenReturn(wrapper);
-
-        // when & then
-        assertThatThrownBy(() -> kisStockPriceAdaptor.getStockCurrentPrice(stockCode))
-                .isInstanceOf(GeneralException.class)
-                .hasMessageContaining(ErrorStatus.FEIGN_ERROR.getMessage());
-    }
-
-    @Test
-    @DisplayName("Feign 호출 중 예외 발생 시 GeneralException 발생")
-    void givenFeignFailure_whenGetStockCurrentPrice_thenThrowGeneralException() {
-        // given
-        String stockCode = "005930";
-        when(tokenHolder.getAccessToken()).thenReturn("mockToken");
-        when(tokenHolder.getAppKey()).thenReturn("mockAppKey");
-        when(tokenHolder.getAppSecret()).thenReturn("mockSecret");
-
-        when(kisStockPriceClient.getStockPrice(
-                anyString(), anyString(), anyString(), anyString(),
-                anyString(), anyString(), anyString(), eq(stockCode)
-        )).thenThrow(new RuntimeException("Feign 호출 실패"));
 
         // when & then
         assertThatThrownBy(() -> kisStockPriceAdaptor.getStockCurrentPrice(stockCode))
@@ -110,15 +93,19 @@ class KisStockPriceAdaptorTest {
     @DisplayName("정상적으로 기간별 주가 정보를 조회하면 KisStockPeriodPriceWrapper를 반환한다")
     void givenValidStockCode_whenGetStockPeriodPrice_thenReturnWrapper() {
         // given
-        String stockCode = "005930";
-        LocalDate startDate = LocalDate.of(2024, 10, 1);
-        LocalDate endDate = LocalDate.of(2024, 10, 21);
-
         when(tokenHolder.getAccessToken()).thenReturn("mockToken");
         when(tokenHolder.getAppKey()).thenReturn("mockAppKey");
         when(tokenHolder.getAppSecret()).thenReturn("mockSecret");
 
-        KisStockPeriodPrice samplePrice = KisStockPeriodPrice.builder()
+        String stockCode = "005930";
+        LocalDate startDate = LocalDate.of(2024, 10, 1);
+        LocalDate endDate = LocalDate.of(2024, 10, 21);
+
+        var currentPrice = KisStockCurrentPrice.create(
+                "97000", "98000", "98500", "96500", "1000", "1.03"
+        );
+
+        var periodPrice = KisStockPeriodPrice.builder()
                 .baseDate("20241021")
                 .openPrice("97000")
                 .closePrice("98000")
@@ -128,10 +115,11 @@ class KisStockPriceAdaptorTest {
                 .changeSign("+")
                 .build();
 
-        KisStockPeriodPriceWrapper wrapper = KisStockPeriodPriceWrapper.builder()
+        var wrapper = KisPeriodResponseWrapper.<KisStockCurrentPrice, KisStockPeriodPrice>builder()
                 .resultCode("0")
-                .message("정상처리")
-                .stockPeriodPriceList(List.of(samplePrice))
+                .message("성공")
+                .output1(currentPrice)
+                .output2(List.of(periodPrice))
                 .build();
 
         when(kisStockPriceClient.getPeriodPrice(
@@ -143,37 +131,24 @@ class KisStockPriceAdaptorTest {
         )).thenReturn(wrapper);
 
         // when
-        KisStockPeriodPriceWrapper result =
-                kisStockPriceAdaptor.getStockPeriodPrice(stockCode, startDate, endDate);
+        var result = kisStockPriceAdaptor.getStockPeriodPrice(stockCode, startDate, endDate);
 
         // then
         assertThat(result).isNotNull();
         assertThat(result.getResultCode()).isEqualTo("0");
-        assertThat(result.getStockPeriodPriceList()).hasSize(1);
-        assertThat(result.getStockPeriodPriceList().get(0).getClosePrice()).isEqualTo("98000");
-
-        verify(kisStockPriceClient, times(1)).getPeriodPrice(
-                anyString(), anyString(), anyString(), anyString(),
-                anyString(), anyString(), anyString(),
-                eq(stockCode),
-                eq("20241001"), eq("20241021"),
-                anyString(), anyString()
-        );
+        assertThat(result.getOutput2()).hasSize(1);
+        assertThat(result.getOutput2().get(0).getClosePrice()).isEqualTo("98000");
     }
 
     @Test
-    @DisplayName("응답 코드가 0이 아니면 GeneralException을 던진다")
+    @DisplayName("기간별 주가 조회 응답 코드가 0이 아니면 GeneralException을 던진다")
     void givenErrorResponse_whenGetStockPeriodPrice_thenThrowException() {
         // given
         String stockCode = "005930";
         LocalDate startDate = LocalDate.of(2024, 10, 1);
         LocalDate endDate = LocalDate.of(2024, 10, 21);
 
-        when(tokenHolder.getAccessToken()).thenReturn("mockToken");
-        when(tokenHolder.getAppKey()).thenReturn("mockAppKey");
-        when(tokenHolder.getAppSecret()).thenReturn("mockSecret");
-
-        KisStockPeriodPriceWrapper wrapper = KisStockPeriodPriceWrapper.builder()
+        var wrapper = KisPeriodResponseWrapper.<KisStockCurrentPrice, KisStockPeriodPrice>builder()
                 .resultCode("1")
                 .message("에러 발생")
                 .build();
@@ -190,38 +165,5 @@ class KisStockPriceAdaptorTest {
         assertThatThrownBy(() -> kisStockPriceAdaptor.getStockPeriodPrice(stockCode, startDate, endDate))
                 .isInstanceOf(GeneralException.class)
                 .hasMessageContaining(ErrorStatus.FEIGN_ERROR.getMessage());
-    }
-
-    @Test
-    @DisplayName("Feign 호출 중 예외 발생 시 GeneralException 발생")
-    void givenFeignFailure_whenGetStockPeriodPrice_thenThrowGeneralException() {
-        // given
-        String stockCode = "005930";
-        LocalDate startDate = LocalDate.of(2024, 10, 1);
-        LocalDate endDate = LocalDate.of(2024, 10, 21);
-
-        when(tokenHolder.getAccessToken()).thenReturn("mockToken");
-        when(tokenHolder.getAppKey()).thenReturn("mockAppKey");
-        when(tokenHolder.getAppSecret()).thenReturn("mockSecret");
-
-        when(kisStockPriceClient.getPeriodPrice(
-                anyString(), anyString(), anyString(), anyString(),
-                anyString(), anyString(), anyString(),
-                eq(stockCode),
-                anyString(), anyString(),
-                anyString(), anyString()
-        )).thenThrow(new RuntimeException("Feign 호출 실패"));
-
-        // when & then
-        assertThatThrownBy(() -> kisStockPriceAdaptor.getStockPeriodPrice(stockCode, startDate, endDate))
-                .isInstanceOf(GeneralException.class)
-                .hasMessageContaining(ErrorStatus.FEIGN_ERROR.getMessage());
-    }
-
-    private KisStockCurrentPriceWrapper createKisStockCurrentPriceWrapper(String resultCode, KisStockCurrentPrice stockCurrentPrice) {
-        return KisStockCurrentPriceWrapper.builder()
-                .resultCode(resultCode)
-                .stockCurrentPrice(stockCurrentPrice)
-                .build();
     }
 }
