@@ -1,5 +1,6 @@
 package com.stockport.server.global.feign.adaptor;
 
+import com.stockport.server.IntegrationTestSupport;
 import com.stockport.server.global.apipayload.code.status.ErrorStatus;
 import com.stockport.server.global.exception.GeneralException;
 import com.stockport.server.global.feign.auth.KisTokenHolder;

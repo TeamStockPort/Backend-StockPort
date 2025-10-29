@@ -1,5 +1,6 @@
 package com.stockport.server.global.feign.adaptor;
 
+import com.stockport.server.IntegrationTestSupport;
 import com.stockport.server.global.apipayload.code.status.ErrorStatus;
 import com.stockport.server.global.exception.GeneralException;
 import com.stockport.server.global.feign.auth.KisTokenHolder;
@@ -149,11 +150,17 @@ class KisIndexDataPriceAdaptorTest {
                         .build();
 
         when(kisIndexClient.getIndexPeriodPrice(
-                anyString(), anyString(), anyString(), anyString(),
-                anyString(), anyString(), anyString(),
-                eq(indexCode),
-                anyString(), anyString(),
-                anyString()
+                anyString(),  // content-type
+                anyString(),  // token
+                anyString(),  // appKey
+                anyString(),  // appSecret
+                anyString(),  // FHKUP03500100
+                anyString(),  // P
+                anyString(),  // U
+                eq(indexCode), // indexCode (동적으로 비교)
+                anyString(),  // startDate
+                anyString(),  // endDate
+                anyString()   // D
         )).thenReturn(wrapper);
 
         // when
@@ -163,11 +170,17 @@ class KisIndexDataPriceAdaptorTest {
         assertThat(result).isNotNull();
 
         verify(kisIndexClient, times(1)).getIndexPeriodPrice(
-                anyString(), anyString(), anyString(), anyString(),
-                anyString(), anyString(), anyString(),
-                eq(indexCode),
-                anyString(), anyString(),
-                anyString()
+                anyString(),  // content-type
+                anyString(),  // token
+                anyString(),  // appKey
+                anyString(),  // appSecret
+                anyString(),  // FHKUP03500100
+                anyString(),  // P
+                anyString(),  // U
+                eq(indexCode), // indexCode (동적으로 비교)
+                anyString(),  // startDate
+                anyString(),  // endDate
+                anyString()   // D
         );
     }
 
@@ -207,13 +220,8 @@ class KisIndexDataPriceAdaptorTest {
         LocalDate start = LocalDate.of(2025, 10, 1);
         LocalDate end = LocalDate.of(2025, 10, 24);
 
-        when(kisIndexClient.getIndexPeriodPrice(
-                anyString(), anyString(), anyString(), anyString(),
-                anyString(), anyString(), anyString(),
-                eq(indexCode),
-                anyString(), anyString(),
-                anyString()
-        )).thenThrow(new RuntimeException("Feign 통신 오류"));
+        when(kisIndexClient.getIndexPeriodPrice(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
+                .thenThrow(new RuntimeException("Feign 통신 오류"));
 
         // when & then
         assertThatThrownBy(() -> kisIndexPriceAdaptor.getIndexPeriodPrice(indexCode, start, end))

@@ -62,8 +62,7 @@ public class KisIndexPriceAdaptor {
 
             String token = "Bearer " + tokenHolder.getAccessToken();
 
-            KisPeriodResponseWrapper<?, KisIndexPeriodPrice> response =
-                    kisIndexClient.getIndexPeriodPrice(
+            var response = kisIndexClient.getIndexPeriodPrice(
                             "application/json; charset=utf-8",
                             token,
                             tokenHolder.getAppKey(),

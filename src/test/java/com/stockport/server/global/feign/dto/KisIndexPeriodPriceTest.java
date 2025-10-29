@@ -1,5 +1,6 @@
 package com.stockport.server.global.feign.dto;
 
+import com.stockport.server.IntegrationTestSupport;
 import com.stockport.server.domain.indexData.constant.MarketType;
 import com.stockport.server.domain.indexData.entity.IndexData;
 import com.stockport.server.global.exception.GeneralException;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class KisIndexPeriodPriceTest {
+class KisIndexPeriodPriceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("toEntity(): 문자열 필드가 올바르게 파싱되고 등락/등락률이 계산된다")
