@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,6 +19,7 @@ import java.math.RoundingMode;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Slf4j
 public class KisIndexPeriodPrice {
 
     @JsonProperty("stck_bsop_date")

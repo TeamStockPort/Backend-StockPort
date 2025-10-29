@@ -52,7 +52,7 @@ public class IndexDataController {
 
     @Operation(
             summary = "과거 지수 데이터 업데이트",
-            description = "코스피와 코스닥의 10년치 지수 데이터를 업데이트해서 저장합니다."
+            description = "코스피와 코스닥의 10년치 지수 데이터를 업데이트해서 저장합니다. (5~10분 소요)"
     )
     @GetMapping("/update/historical")
     public ApiResponse<String> updateHistoricalIndexData() {
