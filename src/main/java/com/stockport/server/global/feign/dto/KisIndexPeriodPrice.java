@@ -1,6 +1,7 @@
 package com.stockport.server.global.feign.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.stockport.server.domain.indexData.constant.MarketType;
 import com.stockport.server.domain.indexData.entity.IndexData;
 import com.stockport.server.global.apipayload.code.status.ErrorStatus;
 import com.stockport.server.global.exception.GeneralException;
@@ -48,8 +49,9 @@ public class KisIndexPeriodPrice {
         }
     }
 
-    public IndexData toEntity(BigDecimal prevClosePrice) {
+    public IndexData toEntity(BigDecimal prevClosePrice, MarketType marketType) {
         return IndexData.builder()
+                .marketType(marketType)
                 .baseDate(KisParsingUtils.parseDateSafe(this.baseDate))
                 .closePrice(KisParsingUtils.parseDoubleSafe(this.closePrice))
                 .openPrice(KisParsingUtils.parseDoubleSafe(this.openPrice))

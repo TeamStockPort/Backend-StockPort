@@ -1,4 +1,4 @@
-package com.stockport.server.domain.indexData.service;
+package com.stockport.server.application.service.indexData;
 
 import com.stockport.server.application.controller.IndexData.dto.IndexDataResponse;
 import com.stockport.server.domain.indexData.constant.MarketType;
@@ -11,6 +11,7 @@ import com.stockport.server.global.feign.dto.KisIndexCurrentPrice;
 import com.stockport.server.global.feign.dto.KisIndexPeriodPrice;
 import com.stockport.server.global.utils.KisParsingUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class IndexDataServiceImpl implements IndexDataService {
     private final IndexDataRepository indexDataRepository;
@@ -44,14 +46,19 @@ public class IndexDataServiceImpl implements IndexDataService {
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusYears(1)) {
              indexPeriodPriceList.addAll(kisIndexPriceAdaptor.getIndexPeriodPrice(
                     marketType.getCode(),
-                    startDate,
-                    startDate.plusYears(1).minusDays(1)
-            ));
+                    date,
+                    date.plusYears(1).minusDays(1)
+             ));
+             try {
+                 Thread.sleep(500);
+             } catch (InterruptedException e) {
+                 log.error("[KIS] 조회 대기 중 오류 발생");
+             }
         }
 
         BigDecimal prevClosePrice = KisParsingUtils.parseBigDecimalSafe(indexPeriodPriceList.get(0).getOpenPrice());
         for (KisIndexPeriodPrice kisIndexPeriodPrice : indexPeriodPriceList) {
-            IndexData indexData = kisIndexPeriodPrice.toEntity(prevClosePrice);
+            IndexData indexData = kisIndexPeriodPrice.toEntity(prevClosePrice, marketType);
             prevClosePrice = indexData.getClosePrice();
 
             if (!indexDataRepository.existsByMarketTypeAndBaseDate(marketType, indexData.getBaseDate())) {

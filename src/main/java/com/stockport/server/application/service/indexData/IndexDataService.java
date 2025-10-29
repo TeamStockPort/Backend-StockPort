@@ -1,8 +1,7 @@
-package com.stockport.server.domain.indexData.service;
+package com.stockport.server.application.service.indexData;
 
 import com.stockport.server.application.controller.IndexData.dto.IndexDataResponse;
 import com.stockport.server.domain.indexData.constant.MarketType;
-import com.stockport.server.domain.indexData.entity.IndexData;
 
 import java.time.LocalDate;
 import java.util.List;

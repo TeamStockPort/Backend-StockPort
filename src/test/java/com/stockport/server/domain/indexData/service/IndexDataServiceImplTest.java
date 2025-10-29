@@ -1,6 +1,6 @@
 package com.stockport.server.domain.indexData.service;
 
-import com.stockport.server.application.controller.IndexData.dto.IndexDataResponse;
+import com.stockport.server.application.service.indexData.IndexDataServiceImpl;
 import com.stockport.server.domain.indexData.constant.MarketType;
 import com.stockport.server.domain.indexData.entity.IndexData;
 import com.stockport.server.domain.indexData.repository.IndexDataRepository;

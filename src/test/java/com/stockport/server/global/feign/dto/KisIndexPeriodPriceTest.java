@@ -1,5 +1,6 @@
 package com.stockport.server.global.feign.dto;
 
+import com.stockport.server.domain.indexData.constant.MarketType;
 import com.stockport.server.domain.indexData.entity.IndexData;
 import com.stockport.server.global.exception.GeneralException;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +28,7 @@ class KisIndexPeriodPriceTest {
         BigDecimal prevClosePrice = new BigDecimal("3290.11");
 
         // when
-        IndexData entity = dto.toEntity(prevClosePrice);
+        IndexData entity = dto.toEntity(prevClosePrice, MarketType.KOSPI);
 
         // then
         assertNotNull(entity, "엔티티는 null이면 안 됨");
@@ -63,7 +64,7 @@ class KisIndexPeriodPriceTest {
         BigDecimal prevClosePriceZero = new BigDecimal("0.00");
 
         // when & then
-        assertThrows(GeneralException.class, () -> dto.toEntity(prevClosePriceZero),
+        assertThrows(GeneralException.class, () -> dto.toEntity(prevClosePriceZero, MarketType.KOSPI),
                 "이전 종가가 0이면 나눗셈 예외 -> GeneralException 이어야 함");
     }
 }
