@@ -1,12 +1,23 @@
 spring:
-  h2:
-    console:
-      enabled: true
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/stockport?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+    username: 'stockport'
+    password: '0000'
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+
+  sql:
+    init:
+      mode: always
+
 kis:
   base-url: https://openapivts.koreainvestment.com:29443
   app-key: PSLB72T1zvI2fQrJIulELY9axGlRC5aBndFk

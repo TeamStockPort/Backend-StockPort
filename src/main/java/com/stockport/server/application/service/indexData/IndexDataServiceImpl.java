@@ -28,7 +28,6 @@ import java.util.List;
 public class IndexDataServiceImpl implements IndexDataService {
     private final IndexDataRepository indexDataRepository;
     private final KisIndexPriceAdaptor kisIndexPriceAdaptor;
-    @PersistenceContext private final EntityManager entityManager;
 
     @Override
     public void updateCurrentIndexData(MarketType marketType) {

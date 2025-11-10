@@ -52,7 +52,7 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public List<StockQueryResponse> searchStocks(String query) {
-        List<Stock> stocks = stockRepository.findTop10ByStockNameContainingIgnoreCaseOrStockCdContainingIgnoreCaseOrIsinCdContainingIgnoreCase(query, query, query);
+        List<Stock> stocks = stockRepository.findTop10ByStockNameContainingIgnoreCaseOrStockCdContainingIgnoreCaseOrIsinCdContainingIgnoreCaseOrderByStockNameAsc(query, query, query);
 
         return stocks.stream()
                 .map(StockQueryResponse::of)

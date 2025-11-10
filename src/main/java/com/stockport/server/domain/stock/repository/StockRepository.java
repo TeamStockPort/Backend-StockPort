@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface StockRepository extends JpaRepository<Stock, String> {
     Page<Stock> findAllByOrderByMarketCapDesc(Pageable pageable);
     Optional<Stock> findByStockCd(String stockCd);
-    List<Stock> findTop10ByStockNameContainingIgnoreCaseOrStockCdContainingIgnoreCaseOrIsinCdContainingIgnoreCase(String query, String query2, String query3);
-}
+    List<Stock> findTop10ByStockNameContainingIgnoreCaseOrStockCdContainingIgnoreCaseOrIsinCdContainingIgnoreCaseOrderByStockNameAsc(
+            String name, String code, String isin
+    );}

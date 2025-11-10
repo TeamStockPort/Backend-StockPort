@@ -12,6 +12,15 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(
+        name = "stock_price",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_stock_price_stock_base_date", columnNames = {"stock_id", "base_date"})
+        },
+        indexes = {
+                @Index(name = "idx_stock_price_stock_base_date", columnList = "stock_id, base_date")
+        }
+)
 public class StockPrice extends BaseEntity {
 
     @Id
@@ -40,7 +49,7 @@ public class StockPrice extends BaseEntity {
     @Column(nullable = false)
     private Integer changeAmount;   // 등락폭
 
-    @Column(precision = 5, scale = 2)
+    @Column(precision = 7, scale = 2)
     private BigDecimal changeRate;  // 등락률
 
     @Builder
