@@ -108,8 +108,8 @@ public class StockServiceImpl implements StockService {
         LocalDate startDate = endDate.minusYears(10);
 
         for (Stock stock : stocks) {
-            for (LocalDate updateDate = startDate; updateDate.isBefore(endDate); updateDate.plusDays(140)) {
-                List<StockPrice> stockPriceList = kisStockPriceAdaptor.getStockPeriodPrice(stock.getStockCd(), startDate, endDate)
+            for (LocalDate updateDate = startDate; updateDate.isBefore(endDate); updateDate = updateDate.plusDays(140)) {
+                List<StockPrice> stockPriceList = kisStockPriceAdaptor.getStockPeriodPrice(stock.getStockCd(), updateDate, updateDate.plusDays(139))
                         .getOutput2().stream()
                         .map(KisStockPeriodPrice::toEntity)
                         .toList();
