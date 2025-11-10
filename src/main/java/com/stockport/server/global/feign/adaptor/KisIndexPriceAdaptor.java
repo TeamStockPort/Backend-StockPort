@@ -34,7 +34,7 @@ public class KisIndexPriceAdaptor {
                     token,
                     tokenHolder.getAppKey(),
                     tokenHolder.getAppSecret(),
-                    "FHKUP03500100",
+                    "FHPUP02100000",
                     "P",
                     "U",
                     indexCode
