@@ -9,8 +9,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Tag(name = "Stock Data", description = "주식 데이터 API")
 @RestController
@@ -32,9 +36,10 @@ public class StockController {
             summary = "시가총액 순 주식 목록 조회",
             description = "시가총액 순으로 정렬된 주식 목록을 페이지네이션하여 조회합니다."
     )
-    public ApiResponse<Page<StockRankResponse>> getStocksByMarketCap(Pageable pageable) {
-        Page<StockRankResponse> stockPage = stockService.getStocksByMarketCap(pageable);
-        return ApiResponse.onSuccess(stockPage);
+    public ApiResponse<Page<StockRankResponse>> getStocksByMarketCap(
+            @ParameterObject @PageableDefault(size = 20, sort = "marketCap", direction = DESC) Pageable pageable
+    ) {
+        return ApiResponse.onSuccess(stockService.getStocksByMarketCap(pageable));
     }
 
     @GetMapping("/{stockCode}")
@@ -65,5 +70,15 @@ public class StockController {
     ) {
         List<StockQueryResponse> response = stockService.searchStocks(query);
         return ApiResponse.onSuccess(response);
+    }
+
+    @GetMapping("/update-current-data")
+    @Operation(
+            summary = "현재 주식 데이터 업데이트",
+            description = "외부 API를 통해 현재 주식 데이터를 업데이트합니다. (약 5-10분 소요)"
+    )
+    public ApiResponse<String> updateCurrentStockData() {
+        stockService.updateCurrentStockData();
+        return ApiResponse.onSuccess("현재 주가 데이터 업데이트 성공");
     }
 }

@@ -54,12 +54,6 @@ public class IndexDataServiceImpl implements IndexDataService {
 
             for (int index = indexPeriodPrice.size() - 1; index >= 0; index--)
                 indexPeriodPriceList.add(indexPeriodPrice.get(index));
-
-            try {
-                 Thread.sleep(600);
-             } catch (InterruptedException e) {
-                 log.error("[KIS] 조회 대기 중 오류 발생");
-             }
         }
 
         BigDecimal prevClosePrice = KisParsingUtils.parseBigDecimalSafe(indexPeriodPriceList.get(0).getOpenPrice());

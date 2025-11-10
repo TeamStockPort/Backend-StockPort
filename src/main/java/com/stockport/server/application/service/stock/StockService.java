@@ -16,4 +16,6 @@ public interface StockService {
     StockInfoResponse getStockInfo(String stockCode, LocalDate startDate, LocalDate endDate);
 
     List<StockQueryResponse> searchStocks(String query);
+
+    void updateCurrentStockData();
 }

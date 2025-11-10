@@ -22,6 +22,7 @@ import java.util.List;
 public class KisIndexPriceAdaptor {
     private final KisIndexClient kisIndexClient;
     private final KisTokenHolder tokenHolder;
+    private final ApiCallAdaptor apiCallAdaptor;
 
     public KisIndexCurrentPrice getIndexCurrentPrice(String indexCode) {
         try {
@@ -29,16 +30,18 @@ public class KisIndexPriceAdaptor {
 
             String token = "Bearer " + tokenHolder.getAccessToken();
 
-            KisResponseWrapper<KisIndexCurrentPrice> response = kisIndexClient.getIndexPrice(
-                    "application/json; charset=utf-8",
-                    token,
-                    tokenHolder.getAppKey(),
-                    tokenHolder.getAppSecret(),
-                    "FHPUP02100000",
-                    "P",
-                    "U",
-                    indexCode
-            );
+            KisResponseWrapper<KisIndexCurrentPrice> response =
+                    apiCallAdaptor.callWithWait(() -> kisIndexClient.getIndexPrice(
+                                    "application/json; charset=utf-8",
+                                    token,
+                                    tokenHolder.getAppKey(),
+                                    tokenHolder.getAppSecret(),
+                                    "FHPUP02100000",
+                                    "P",
+                                    "U",
+                                    indexCode
+                            )
+                    );
 
             if (!"0".equals(response.getResultCode())) {
                 log.error("[KIS] 지수 조회 실패 (resultCode={}): {}", response.getResultCode(), response.getMessage());
@@ -62,7 +65,8 @@ public class KisIndexPriceAdaptor {
 
             String token = "Bearer " + tokenHolder.getAccessToken();
 
-            var response = kisIndexClient.getIndexPeriodPrice(
+            var response = apiCallAdaptor.callWithWait(
+                    () -> kisIndexClient.getIndexPeriodPrice(
                             "application/json; charset=utf-8",
                             token,
                             tokenHolder.getAppKey(),
@@ -74,7 +78,8 @@ public class KisIndexPriceAdaptor {
                             startDate.format(DateTimeFormatter.BASIC_ISO_DATE),
                             endDate.format(DateTimeFormatter.BASIC_ISO_DATE),
                             "D"
-                    );
+                    )
+            );
 
             if (!"0".equals(response.getResultCode())) {
                 log.error("[KIS] 업종 기간별 시세 조회 실패 (code={}, msg={})",

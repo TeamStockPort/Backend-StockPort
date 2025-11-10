@@ -5,10 +5,13 @@ import com.stockport.server.application.controller.stock.dto.StockPriceResponse;
 import com.stockport.server.application.controller.stock.dto.StockQueryResponse;
 import com.stockport.server.application.controller.stock.dto.StockRankResponse;
 import com.stockport.server.domain.stock.entity.Stock;
+import com.stockport.server.domain.stock.entity.StockCurrentPrice;
 import com.stockport.server.domain.stock.repository.StockPriceRepository;
 import com.stockport.server.domain.stock.repository.StockRepository;
 import com.stockport.server.global.apipayload.code.status.ErrorStatus;
 import com.stockport.server.global.exception.GeneralException;
+import com.stockport.server.global.feign.adaptor.KisStockPriceAdaptor;
+import com.stockport.server.global.feign.dto.KisStockCurrentPrice;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class StockServiceImpl implements StockService {
     private final StockRepository stockRepository;
     private final StockPriceRepository stockPriceRepository;
+    private final KisStockPriceAdaptor kisStockPriceAdaptor;
 
     @Override
     public Page<StockRankResponse> getStocksByMarketCap(Pageable pageable) {
@@ -57,5 +61,14 @@ public class StockServiceImpl implements StockService {
         return stocks.stream()
                 .map(StockQueryResponse::of)
                 .toList();
+    }
+
+    @Override
+    public void updateCurrentStockData() {
+        List<Stock> stocks = stockRepository.findAll();
+        for (Stock stock : stocks) {
+            StockCurrentPrice newStockCurrentPrice = kisStockPriceAdaptor.getStockCurrentPrice(stock.getStockCd()).toEntity();
+            stock.updateCurrentPriceInfo(newStockCurrentPrice);
+        }
     }
 }
