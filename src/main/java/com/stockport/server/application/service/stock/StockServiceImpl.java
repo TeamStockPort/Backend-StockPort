@@ -16,6 +16,7 @@ import com.stockport.server.global.feign.dto.KisStockCurrentPrice;
 import com.stockport.server.global.feign.dto.KisStockPeriodPrice;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -81,6 +82,7 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    @Transactional
     public void updatePeriodicStockData(LocalDate startDate, LocalDate endDate) {
         List<Stock> stocks = stockRepository.findAll();
         for (Stock stock : stocks) {
@@ -102,6 +104,7 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    @Transactional
     public void updateHistoricalStockData() {
         List<Stock> stocks = stockRepository.findAll();
         LocalDate endDate = LocalDate.now();
