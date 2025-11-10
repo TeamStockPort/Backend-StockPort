@@ -1,23 +1,32 @@
 package com.stockport.server.global.feign.client;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stockport.server.global.feign.auth.KisTokenHolder;
+import com.stockport.server.global.feign.dto.KisStockCurrentPrice;
+import com.stockport.server.global.feign.dto.KisStockPeriodPrice;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @SpringBootTest
 class KisStockPriceClientTest {
-//
-//    @Autowired
-//    private KisStockPriceClient kisStockPriceClient;
-//
-//    @Autowired
-//    private KisTokenHolder tokenHolder;
-//
-//    @Autowired
-//    private ObjectMapper objectMapper;
-//
+
+    @Autowired
+    private KisStockPriceClient kisStockPriceClient;
+
+    @Autowired
+    private KisTokenHolder tokenHolder;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
 //    @Test
 //    @DisplayName("getStockPrice: 실제 API 호출 → Wrapper + 내부 DTO 구조 전체 검증 및 JSON 출력")
 //    void getStockPriceTest() throws Exception {
@@ -36,21 +45,21 @@ class KisStockPriceClientTest {
 //                trId, custType, marketCode, stockCode);
 //
 //        // when
-//        KisStockCurrentPriceWrapper response = kisStockPriceClient.getStockPrice(
+//        var response = kisStockPriceClient.getStockPrice(
 //                contentType, bearerToken, appKey, appSecret, trId, custType, marketCode, stockCode
 //        );
 //
 //        // then
 //        assertThat(response).isNotNull();
 //        assertThat(response.getResultCode()).isEqualTo("0");
-//        assertThat(response.getStockCurrentPrice()).isNotNull();
+//        assertThat(response.getOutput()).isNotNull();
 //
 //        // 전체 JSON 로그 출력
 //        String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
 //        log.info("[Full JSON Response]\n{}", json);
 //
 //        // 내부 주식 데이터 로깅
-//        KisStockCurrentPrice price = response.getStockCurrentPrice();
+//        KisStockCurrentPrice price = response.getOutput();
 //        log.info("[Parsed StockCurrentPrice]");
 //        log.info("시가: {}", price.getOpenPrice());
 //        log.info("현재가: {}", price.getCurrentPrice());
@@ -88,7 +97,7 @@ class KisStockPriceClientTest {
 //                trId, custType, marketCode, stockCode, periodCode, startDate, endDate);
 //
 //        // when
-//        KisStockPeriodPriceWrapper response = kisStockPriceClient.getPeriodPrice(
+//        var response = kisStockPriceClient.getPeriodPrice(
 //                contentType, bearerToken, appKey, appSecret, trId, custType,
 //                marketCode, stockCode, periodCode, adjustedYn, startDate, endDate
 //        );
@@ -102,7 +111,7 @@ class KisStockPriceClientTest {
 //        log.info("[Full JSON Response]\n{}", json);
 //
 //        // 내부 시세 데이터 확인
-//        List<KisStockPeriodPrice> prices = response.getStockPeriodPriceList();
+//        List<KisStockPeriodPrice> prices = response.getOutput2();
 //        assertThat(prices).isNotEmpty();
 //
 //        log.info("[Parsed Stock Period Prices]");

@@ -20,6 +20,7 @@ import java.time.LocalDate;
 public class KisStockPriceAdaptor {
     private final KisStockPriceClient kisStockPriceClient;
     private final KisTokenHolder tokenHolder;
+    private final ApiCallAdaptor apiCallAdaptor;
 
     public KisStockCurrentPrice getStockCurrentPrice(String stockCode) {
         try {
@@ -27,16 +28,19 @@ public class KisStockPriceAdaptor {
 
             String token = "Bearer " + tokenHolder.getAccessToken();
 
-            KisResponseWrapper<KisStockCurrentPrice> response = kisStockPriceClient.getStockPrice(
-                    "application/json; charset=utf-8",
-                    token,
-                    tokenHolder.getAppKey(),
-                    tokenHolder.getAppSecret(),
-                    "FHKST01010100",
-                    "P",
-                    "J",
-                    stockCode
-            );
+            KisResponseWrapper<KisStockCurrentPrice> response =
+                    apiCallAdaptor.callWithWait(() ->
+                            kisStockPriceClient.getStockPrice(
+                                    "application/json; charset=utf-8",
+                                    token,
+                                    tokenHolder.getAppKey(),
+                                    tokenHolder.getAppSecret(),
+                                    "FHKST01010100",
+                                    "P",
+                                    "J",
+                                    stockCode
+                            )
+                    );
 
             if (!response.getResultCode().equals("0")) {
                 throw new GeneralException(ErrorStatus.FEIGN_ERROR);
@@ -58,20 +62,22 @@ public class KisStockPriceAdaptor {
 
             String token = "Bearer " + tokenHolder.getAccessToken();
 
-            var response = kisStockPriceClient.getPeriodPrice(
-                    "application/json; charset=utf-8",
-                    token,
-                    tokenHolder.getAppKey(),
-                    tokenHolder.getAppSecret(),
-                    "FHKST03010100",
-                    "P",
-                    "J",
-                    stockCode,
-                    startDate.format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE),
-                    endDate.format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE),
-                    "P",
-                    "1"
-            );
+            var response =
+                    apiCallAdaptor.callWithWait(() -> kisStockPriceClient.getPeriodPrice(
+                                    "application/json; charset=utf-8",
+                                    token,
+                                    tokenHolder.getAppKey(),
+                                    tokenHolder.getAppSecret(),
+                                    "FHKST03010100",
+                                    "P",
+                                    "J",
+                                    stockCode,
+                                    "D",
+                                    "J",
+                                    startDate.format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE),
+                                    endDate.format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE)
+                            )
+                    );
 
             if (!response.getResultCode().equals("0")) {
                 throw new GeneralException(ErrorStatus.FEIGN_ERROR);

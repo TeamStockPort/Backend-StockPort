@@ -10,10 +10,13 @@ import com.stockport.server.global.feign.adaptor.KisIndexPriceAdaptor;
 import com.stockport.server.global.feign.dto.KisIndexCurrentPrice;
 import com.stockport.server.global.feign.dto.KisIndexPeriodPrice;
 import com.stockport.server.global.utils.KisParsingUtils;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.parser.Entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -43,20 +46,14 @@ public class IndexDataServiceImpl implements IndexDataService {
 
         List<KisIndexPeriodPrice> indexPeriodPriceList = new ArrayList<>();
 
-        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusMonths(1)) {
+        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(70)) {
             List<KisIndexPeriodPrice> indexPeriodPrice = kisIndexPriceAdaptor.getIndexPeriodPrice(
                     marketType.getCode(),
                     date,
-                    date.plusMonths(1).minusDays(1));
+                    date.plusDays(70).minusDays(1));
 
             for (int index = indexPeriodPrice.size() - 1; index >= 0; index--)
                 indexPeriodPriceList.add(indexPeriodPrice.get(index));
-
-            try {
-                 Thread.sleep(500);
-             } catch (InterruptedException e) {
-                 log.error("[KIS] 조회 대기 중 오류 발생");
-             }
         }
 
         BigDecimal prevClosePrice = KisParsingUtils.parseBigDecimalSafe(indexPeriodPriceList.get(0).getOpenPrice());
