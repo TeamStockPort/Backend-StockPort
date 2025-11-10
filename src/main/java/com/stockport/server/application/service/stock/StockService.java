@@ -18,4 +18,8 @@ public interface StockService {
     List<StockQueryResponse> searchStocks(String query);
 
     void updateCurrentStockData();
+
+    void updatePeriodicStockData(LocalDate startDate, LocalDate endDate);
+
+    void updateHistoricalStockData();
 }

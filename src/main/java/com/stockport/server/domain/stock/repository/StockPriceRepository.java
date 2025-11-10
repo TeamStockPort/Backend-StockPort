@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface StockPriceRepository extends JpaRepository<StockPrice, Long> {
     List<StockPrice> findByStockAndBaseDateBetween(Stock stock, LocalDate startDate, LocalDate endDate);
+
+    boolean existsByStockAndBaseDate(Stock stock, LocalDate baseDate);
 }

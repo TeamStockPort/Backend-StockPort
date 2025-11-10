@@ -64,18 +64,18 @@ public class KisStockPriceAdaptor {
 
             var response =
                     apiCallAdaptor.callWithWait(() -> kisStockPriceClient.getPeriodPrice(
-                            "application/json; charset=utf-8",
-                            token,
-                            tokenHolder.getAppKey(),
-                            tokenHolder.getAppSecret(),
-                            "FHKST03010100",
-                            "P",
-                            "J",
-                            stockCode,
-                            startDate.format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE),
-                            endDate.format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE),
-                            "P",
-                            "1"
+                                    "application/json; charset=utf-8",
+                                    token,
+                                    tokenHolder.getAppKey(),
+                                    tokenHolder.getAppSecret(),
+                                    "FHKST03010100",
+                                    "P",
+                                    "J",
+                                    stockCode,
+                                    "D",
+                                    "J",
+                                    startDate.format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE),
+                                    endDate.format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE)
                             )
                     );
 

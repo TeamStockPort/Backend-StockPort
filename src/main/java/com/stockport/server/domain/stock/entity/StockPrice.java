@@ -15,10 +15,10 @@ import static jakarta.persistence.FetchType.LAZY;
 @Table(
         name = "stock_price",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uk_stock_price_stock_base_date", columnNames = {"stock_id", "base_date"})
+                @UniqueConstraint(name = "uk_stock_price_stock_base_date", columnNames = {"isin_cd", "base_date"})
         },
         indexes = {
-                @Index(name = "idx_stock_price_stock_base_date", columnList = "stock_id, base_date")
+                @Index(name = "idx_stock_price_stock_base_date", columnList = "isin_cd, base_date")
         }
 )
 public class StockPrice extends BaseEntity {
@@ -28,7 +28,7 @@ public class StockPrice extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "stock_id", nullable = false)
+    @JoinColumn(name = "isin_cd", nullable = false)
     private Stock stock;
 
     @Column(nullable = false)
@@ -51,6 +51,11 @@ public class StockPrice extends BaseEntity {
 
     @Column(precision = 7, scale = 2)
     private BigDecimal changeRate;  // 등락률
+
+    public StockPrice updateStock(Stock stock) {
+        this.stock = stock;
+        return this;
+    }
 
     @Builder
     public StockPrice(Stock stock, LocalDate baseDate,

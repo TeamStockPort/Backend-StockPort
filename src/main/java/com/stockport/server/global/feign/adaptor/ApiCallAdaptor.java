@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 public class ApiCallAdaptor {
     private static final Lock GLOBAL_LOCK = new ReentrantLock(true); // FIFO 공정 락
     private static long lastCallTime = 0L; // 마지막 호출 시각 (전역)
-    private static final long INTERVAL_MS = 1000; // 1초
+    private static final long INTERVAL_MS = 700;
 
     public <T> T callWithWait(Supplier<T> apiCall) {
         GLOBAL_LOCK.lock();

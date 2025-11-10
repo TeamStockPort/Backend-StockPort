@@ -6,12 +6,16 @@ import com.stockport.server.application.controller.stock.dto.StockQueryResponse;
 import com.stockport.server.application.controller.stock.dto.StockRankResponse;
 import com.stockport.server.domain.stock.entity.Stock;
 import com.stockport.server.domain.stock.entity.StockCurrentPrice;
+import com.stockport.server.domain.stock.entity.StockPrice;
 import com.stockport.server.domain.stock.repository.StockPriceRepository;
 import com.stockport.server.domain.stock.repository.StockRepository;
 import com.stockport.server.global.apipayload.code.status.ErrorStatus;
 import com.stockport.server.global.exception.GeneralException;
 import com.stockport.server.global.feign.adaptor.KisStockPriceAdaptor;
 import com.stockport.server.global.feign.dto.KisStockCurrentPrice;
+import com.stockport.server.global.feign.dto.KisStockPeriodPrice;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,6 +33,9 @@ public class StockServiceImpl implements StockService {
     private final StockRepository stockRepository;
     private final StockPriceRepository stockPriceRepository;
     private final KisStockPriceAdaptor kisStockPriceAdaptor;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Page<StockRankResponse> getStocksByMarketCap(Pageable pageable) {
@@ -69,6 +76,53 @@ public class StockServiceImpl implements StockService {
         for (Stock stock : stocks) {
             StockCurrentPrice newStockCurrentPrice = kisStockPriceAdaptor.getStockCurrentPrice(stock.getStockCd()).toEntity();
             stock.updateCurrentPriceInfo(newStockCurrentPrice);
+            log.info("[stock] 현재 주가 데이터 업데이트 완료: {} 진행률 {}%", stock.getStockCd(), (stocks.indexOf(stock) + 1) * 100 / stocks.size());
+        }
+    }
+
+    @Override
+    public void updatePeriodicStockData(LocalDate startDate, LocalDate endDate) {
+        List<Stock> stocks = stockRepository.findAll();
+        for (Stock stock : stocks) {
+            List<StockPrice> stockPriceList = kisStockPriceAdaptor.getStockPeriodPrice(stock.getStockCd(), startDate, endDate)
+                    .getOutput2().stream()
+                    .map(KisStockPeriodPrice::toEntity)
+                    .toList();
+
+            for (StockPrice stockPrice : stockPriceList) {
+                if (stockPriceRepository.existsByStockAndBaseDate(stock, stockPrice.getBaseDate()))
+                    continue;
+                stockPrice.updateStock(stock);
+                stockPriceRepository.save(stockPrice);
+            }
+            log.info("[stock] 기간 주가 데이터 업데이트 완료: {} 진행률 {}%", stock.getStockCd(), (stocks.indexOf(stock) + 1) * 100 / stocks.size());
+            entityManager.flush();
+            entityManager.clear();
+        }
+    }
+
+    @Override
+    public void updateHistoricalStockData() {
+        List<Stock> stocks = stockRepository.findAll();
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusYears(10);
+
+        for (Stock stock : stocks) {
+            for (LocalDate updateDate = startDate; updateDate.isBefore(endDate); updateDate.plusDays(140)) {
+                List<StockPrice> stockPriceList = kisStockPriceAdaptor.getStockPeriodPrice(stock.getStockCd(), startDate, endDate)
+                        .getOutput2().stream()
+                        .map(KisStockPeriodPrice::toEntity)
+                        .toList();
+                for (StockPrice stockPrice : stockPriceList) {
+                    if (stockPriceRepository.existsByStockAndBaseDate(stock, stockPrice.getBaseDate()))
+                        continue;
+                    stockPrice.updateStock(stock);
+                    stockPriceRepository.save(stockPrice);
+                }
+            }
+            log.info("[stock] 과거 주가 데이터 업데이트 완료: {} 진행률 {}%", stock.getStockCd(), (stocks.indexOf(stock) + 1) * 100 / stocks.size());
+            entityManager.flush();
+            entityManager.clear();
         }
     }
 }
