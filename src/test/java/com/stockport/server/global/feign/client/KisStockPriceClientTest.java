@@ -1,6 +1,7 @@
 package com.stockport.server.global.feign.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stockport.server.IntegrationTestSupport;
 import com.stockport.server.global.feign.auth.KisTokenHolder;
 import com.stockport.server.global.feign.dto.KisStockCurrentPrice;
 import com.stockport.server.global.feign.dto.KisStockPeriodPrice;
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @SpringBootTest
-class KisStockPriceClientTest {
+class KisStockPriceClientTest extends IntegrationTestSupport {
 
     @Autowired
     private KisStockPriceClient kisStockPriceClient;
@@ -26,7 +27,7 @@ class KisStockPriceClientTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
+//
 //    @Test
 //    @DisplayName("getStockPrice: 실제 API 호출 → Wrapper + 내부 DTO 구조 전체 검증 및 JSON 출력")
 //    void getStockPriceTest() throws Exception {
@@ -127,4 +128,63 @@ class KisStockPriceClientTest {
 //        assertThat(first.getOpenPrice()).isNotBlank();
 //        assertThat(first.getClosePrice()).isNotBlank();
 //    }
+//
+//    @Test
+//    @DisplayName("getMultiStockPrice: 실제 API 호출 → Wrapper + 내부 DTO 전체 검증 및 JSON 출력")
+//    void getMultiStockPriceTest() throws Exception {
+//        // given
+//        String contentType = "application/json; charset=utf-8";
+//        String bearerToken = "Bearer " + tokenHolder.getAccessToken();
+//        String appKey = tokenHolder.getAppKey();
+//        String appSecret = tokenHolder.getAppSecret();
+//        String trId = "FHKST11300006"; // 다중 국내주식 현재가 조회
+//        String custType = "P";         // 개인
+//        String marketCode = "J";       // KRX (유가증권)
+//
+//
+//        log.info("[Request] KIS 다중 주식 현재가 조회 시작");
+//
+//        // when
+//        var response = kisStockPriceClient.getMultiStockPrice(
+//            contentType,
+//            bearerToken,
+//            appKey,
+//            appSecret,
+//            trId,
+//            custType,
+//            "J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J","J",
+//            "131890","108450","102780","213610","448330","225190","448630","005610","138520","122350","492500","089470","294870","267250","267270",
+//            "443060","071970","010620","322000","042670","0000J0","003830","000880","00088K","452260","45226K","001470","001470","451800","489790"
+//        );
+//
+//        // then
+//        assertThat(response).isNotNull();
+//        assertThat(response.getResultCode()).isEqualTo("0");
+//        var prices = response.getOutput();
+//        assertThat(prices).isNotEmpty();
+//
+//        // 전체 JSON 로그 출력
+//        String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
+//        log.info("[Full JSON Response]\n{}", json);
+//
+//        log.info("[Parsed Multi StockCurrentPrice List]");
+//        for (var price : prices) {
+//            log.info("시가: {}", price.getOpenPrice());
+//            log.info("현재가: {}", price.getCurrentPrice());
+//            log.info("고가: {}", price.getHighPrice());
+//            log.info("저가: {}", price.getLowPrice());
+//            log.info("등락폭: {}", price.getChangeAmount());
+//            log.info("등락률: {}", price.getChangeRate());
+//        }
+//
+//        // 첫 번째 데이터 검증 (샘플)
+//        var first = prices.get(0);
+//        assertThat(first.getCurrentPrice()).isNotBlank();
+//        assertThat(first.getOpenPrice()).isNotBlank();
+//        assertThat(first.getHighPrice()).isNotBlank();
+//        assertThat(first.getLowPrice()).isNotBlank();
+//        assertThat(first.getChangeAmount()).isNotBlank();
+//        assertThat(first.getChangeRate()).isNotBlank();
+//    }
+
 }

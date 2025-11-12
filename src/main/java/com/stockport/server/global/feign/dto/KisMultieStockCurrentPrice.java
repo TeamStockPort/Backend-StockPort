@@ -4,37 +4,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.stockport.server.domain.indexData.constant.MarketType;
 import com.stockport.server.domain.indexData.entity.IndexData;
 import com.stockport.server.global.utils.KisParsingUtils;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class KisIndexCurrentPrice {
+public class KisMultieStockCurrentPrice {
+    @JsonProperty("inter2_oprc")
+    private String openPrice;          // 시가
 
-    @JsonProperty("bstp_nmix_prpr")
-    private String currentPrice;    // 현재 지수
+    @JsonProperty("inter2_prpr")
+    private String currentPrice;       // 현재가
 
-    @JsonProperty("bstp_nmix_prdy_vrss")
-    private String changeAmount;    // 전일 대비 등락폭
+    @JsonProperty("inter2_hgpr")
+    private String highPrice;          // 고가
 
-    @JsonProperty("bstp_nmix_prdy_ctrt")
-    private String changeRate;      // 전일 대비 등락률 (%)
+    @JsonProperty("inter2_lwpr")
+    private String lowPrice;           // 저가
 
-    @JsonProperty("bstp_nmix_oprc")
-    private String openPrice;       // 시가
+    @JsonProperty("inter2_prdy_vrss")
+    private String changeAmount;       // 등락폭
 
-    @JsonProperty("bstp_nmix_hgpr")
-    private String highPrice;       // 고가
-
-    @JsonProperty("bstp_nmix_lwpr")
-    private String lowPrice;        // 저가
+    @JsonProperty("prdy_ctrt")
+    private String changeRate;         // 등락률
 
     public IndexData toEntity(MarketType marketType, LocalDate baseDate) {
         return IndexData.builder()
