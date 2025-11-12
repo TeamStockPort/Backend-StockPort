@@ -32,10 +32,11 @@ public class IndexDataServiceImpl implements IndexDataService {
     @Override
     public void updateCurrentIndexData(MarketType marketType) {
         KisIndexCurrentPrice indexCurrentPrice = kisIndexPriceAdaptor.getIndexCurrentPrice(marketType.getCode());
+        IndexData currentIndexData = indexCurrentPrice.toEntity(marketType, LocalDate.now());
         indexDataRepository.findByMarketTypeAndBaseDate(marketType, LocalDate.now())
                 .ifPresentOrElse(
-                        existing -> existing.updateClosePrice(KisParsingUtils.parseBigDecimalSafe(indexCurrentPrice.getCurrentPrice())),
-                        () -> indexDataRepository.save(indexCurrentPrice.toEntity(marketType, LocalDate.now()))
+                        existing -> existing.updatePrice(currentIndexData),
+                        () -> indexDataRepository.save(currentIndexData)
                 );
     }
 
