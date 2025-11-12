@@ -60,7 +60,7 @@ public class KisTokenHolder {
         }
     }
 
-    @Scheduled(initialDelay = 60_000, fixedDelay = 23 * 60 * 60 * 1000)    // 23시간마다 갱신
+    @Scheduled(initialDelay = 60_000, fixedDelay = 4 * 60 * 60 * 1000)    // 4시간마다 갱신
     public void scheduledRefresh() {
         refreshToken();
     }
