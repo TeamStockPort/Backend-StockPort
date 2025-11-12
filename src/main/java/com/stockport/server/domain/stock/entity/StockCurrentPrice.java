@@ -79,4 +79,16 @@ public class StockCurrentPrice extends BaseEntity {
                 .changeRate(changeRate)
                 .build();
     }
+
+    public StockPrice toStockPriceEntity() {
+        return StockPrice.builder()
+                .baseDate(this.baseDate)
+                .openPrice(this.openPrice)
+                .closePrice(this.currentPrice)
+                .highPrice(this.highPrice)
+                .lowPrice(this.lowPrice)
+                .changeAmount(this.changeAmount)
+                .changeRate(this.changeRate)
+                .build();
+    }
 }
