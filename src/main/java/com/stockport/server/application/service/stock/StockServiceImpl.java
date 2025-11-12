@@ -128,4 +128,16 @@ public class StockServiceImpl implements StockService {
             entityManager.clear();
         }
     }
+
+    @Override
+    public void saveDailyStockData() {
+        List<Stock> stockList = stockRepository.findAll();
+        for (Stock stock : stockList) {
+            if (stockPriceRepository.existsByStockAndBaseDate(stock, LocalDate.now()))
+                continue;
+            StockPrice stockPrice = stock.getCurrentPriceInfo().toStockPriceEntity();
+            stockPrice.updateStock(stock);
+            stockPriceRepository.save(stockPrice);
+        }
+    }
 }

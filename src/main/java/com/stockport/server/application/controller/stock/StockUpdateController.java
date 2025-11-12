@@ -20,6 +20,16 @@ import java.time.LocalDate;
 public class StockUpdateController {
     private final StockService stockService;
 
+    @GetMapping("/save-daily-data")
+    @Operation(
+            summary = "일별 주식 데이터 저장",
+            description = "매일 종가 기준으로 일별 주식 데이터를 저장합니다."
+    )
+    public ApiResponse<String> saveDailyStockData() {
+        stockService.saveDailyStockData();
+        return ApiResponse.onSuccess("일별 주가 데이터 저장 성공");
+    }
+
     @GetMapping("/update-current-data")
     @Operation(
             summary = "현재 주식 데이터 업데이트",

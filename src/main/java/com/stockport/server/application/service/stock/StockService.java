@@ -4,7 +4,6 @@ import com.stockport.server.application.controller.stock.dto.StockInfoResponse;
 import com.stockport.server.application.controller.stock.dto.StockQueryResponse;
 import com.stockport.server.application.controller.stock.dto.StockRankResponse;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
@@ -22,4 +21,6 @@ public interface StockService {
     void updatePeriodicStockData(LocalDate startDate, LocalDate endDate);
 
     void updateHistoricalStockData();
+
+    void saveDailyStockData();
 }

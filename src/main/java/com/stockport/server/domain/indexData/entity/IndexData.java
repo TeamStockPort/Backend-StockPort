@@ -2,6 +2,7 @@ package com.stockport.server.domain.indexData.entity;
 
 import com.stockport.server.domain.indexData.constant.MarketType;
 import com.stockport.server.global.entity.BaseEntity;
+import com.stockport.server.global.feign.dto.KisIndexCurrentPrice;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -54,6 +55,16 @@ public class IndexData extends BaseEntity {
 
     public IndexData updateMarketType(MarketType marketType) {
         this.marketType = marketType;
+        return this;
+    }
+
+    public IndexData updatePrice(IndexData indexData) {
+        this.openPrice = indexData.getOpenPrice();
+        this.closePrice = indexData.getClosePrice();
+        this.highPrice = indexData.getHighPrice();
+        this.lowPrice = indexData.getLowPrice();
+        this.changeAmount = indexData.getChangeAmount();
+        this.changeRate = indexData.getChangeRate();
         return this;
     }
 
