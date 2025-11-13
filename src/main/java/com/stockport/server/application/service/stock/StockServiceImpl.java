@@ -72,11 +72,13 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    @Transactional
     public void updateCurrentStockData() {
         List<Stock> stocks = stockRepository.findAll();
         for (Stock stock : stocks) {
             StockCurrentPrice newStockCurrentPrice = kisStockPriceAdaptor.getStockCurrentPrice(stock.getStockCd()).toEntity();
             stock.updateCurrentPriceInfo(newStockCurrentPrice);
+
             log.info("[stock] 현재 주가 데이터 업데이트 완료: {} 진행률 {}%", stock.getStockCd(), (stocks.indexOf(stock) + 1) * 100 / stocks.size());
         }
     }
@@ -130,6 +132,7 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    @Transactional
     public void saveDailyStockData() {
         List<Stock> stockList = stockRepository.findAll();
         for (Stock stock : stockList) {
