@@ -12,6 +12,7 @@ import com.stockport.server.global.feign.dto.KisIndexPeriodPrice;
 import com.stockport.server.global.utils.KisParsingUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class IndexDataServiceImpl implements IndexDataService {
     private final KisIndexPriceAdaptor kisIndexPriceAdaptor;
 
     @Override
+    @Transactional
     public void updateCurrentIndexData(MarketType marketType) {
         KisIndexCurrentPrice indexCurrentPrice = kisIndexPriceAdaptor.getIndexCurrentPrice(marketType.getCode());
         IndexData currentIndexData = indexCurrentPrice.toEntity(marketType, LocalDate.now());
@@ -41,6 +43,7 @@ public class IndexDataServiceImpl implements IndexDataService {
     }
 
     @Override
+    @Transactional
     public void updateHistoricalIndexData(MarketType marketType) {
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusYears(10);
