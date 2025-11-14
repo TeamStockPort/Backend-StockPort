@@ -26,4 +26,6 @@ public interface StockPriceRepository extends JpaRepository<StockPrice, Long> {
             @Param("start") LocalDate start,
             @Param("end") LocalDate end
     );
+
+    List<StockPrice> findAllByBaseDate(LocalDate today);
 }
