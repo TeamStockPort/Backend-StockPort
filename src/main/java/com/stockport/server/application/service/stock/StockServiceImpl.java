@@ -100,7 +100,7 @@ public class StockServiceImpl implements StockService {
         List<Stock> stocks = stockRepository.findAll();
 
         for (Stock stock : stocks) {
-            for (LocalDate updateDate = startDate; updateDate.isBefore(endDate); updateDate = updateDate.plusDays(140)) {
+            for (LocalDate updateDate = (startDate.isBefore(stock.getListedDate()) ? stock.getListedDate() : startDate); updateDate.isBefore(endDate); updateDate = updateDate.plusDays(140)) {
                 periodicSaver.saveOnePeriod(stock, updateDate, updateDate.plusDays(139));
             }
 
