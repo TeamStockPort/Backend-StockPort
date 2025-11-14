@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 public class StockScheduler {
     private final StockService stockService;
 
-    @Scheduled(cron = "0 50 23 * * MON-FRI", zone = "Asia/Seoul") // todo: 공휴일/휴장일 스케쥴러 처리 필요.
+    @Scheduled(cron = "5 0 18 * * MON-FRI", zone = "Asia/Seoul") // todo: 공휴일/휴장일 스케쥴러 처리 필요.
     public void saveDailyStockData() {
         stockService.saveDailyStockData();
         log.info("[Scheduler] 일별 주가 데이터 업데이트 완료");
     }
 
-    @Scheduled(cron = "0 0 22 * * MON-FRI", zone = "Asia/Seoul") // todo: 공휴일/휴장일 스케쥴러 처리 필요.
+    @Scheduled(cron = "0/5 0 9-18 * * MON-FRI", zone = "Asia/Seoul") // todo: 공휴일/휴장일 스케쥴러 처리 필요.
     public void updateStockData() {
         stockService.updateCurrentStockData();
         log.info("[Scheduler] 주가 데이터 업데이트 완료");
