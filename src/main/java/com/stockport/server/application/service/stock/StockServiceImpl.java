@@ -12,8 +12,10 @@ import com.stockport.server.domain.stock.repository.StockRepository;
 import com.stockport.server.global.apipayload.code.status.ErrorStatus;
 import com.stockport.server.global.exception.GeneralException;
 import com.stockport.server.global.feign.adaptor.KisStockPriceAdaptor;
+import com.stockport.server.global.feign.dto.KisMultieStockCurrentPrice;
 import com.stockport.server.global.feign.dto.KisStockCurrentPrice;
 import com.stockport.server.global.feign.dto.KisStockPeriodPrice;
+import com.stockport.server.global.feign.dto.wrapper.KisResponseWrapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -72,13 +74,22 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    @Transactional
     public void updateCurrentStockData() {
         List<Stock> stocks = stockRepository.findAll();
-        for (Stock stock : stocks) {
-            StockCurrentPrice newStockCurrentPrice = kisStockPriceAdaptor.getStockCurrentPrice(stock.getStockCd()).toEntity();
-            stock.updateCurrentPriceInfo(newStockCurrentPrice);
-            log.info("[stock] 현재 주가 데이터 업데이트 완료: {} 진행률 {}%", stock.getStockCd(), (stocks.indexOf(stock) + 1) * 100 / stocks.size());
+        for (int stockIdx = 0; stockIdx < stocks.size() / 30; stockIdx++) {
+            List<Stock> stockList = stocks.subList(stockIdx * 30, Math.min((stockIdx + 1) * 30, stocks.size()));
+            List<String> stockCdList = stockList.stream()
+                    .map(Stock::getStockCd)
+                    .toList();
+            List<StockCurrentPrice> stockCurrentPriceList = kisStockPriceAdaptor.getMultiStockCurrentPrice(stockCdList).getOutput().stream()
+                    .map(currentPrice -> currentPrice.toEntity(LocalDate.now()))
+                    .toList();
+
+            for (int i = 0; i < Math.min(30, stockList.size()); i++)
+                stockList.get(i).updateCurrentPriceInfo(stockCurrentPriceList.get(i));
         }
+        log.info("[stock] 현재 주가 데이터 업데이트 완료");
     }
 
     @Override
@@ -130,6 +141,7 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    @Transactional
     public void saveDailyStockData() {
         List<Stock> stockList = stockRepository.findAll();
         for (Stock stock : stockList) {

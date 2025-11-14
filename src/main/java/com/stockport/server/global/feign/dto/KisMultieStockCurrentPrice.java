@@ -3,6 +3,7 @@ package com.stockport.server.global.feign.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.stockport.server.domain.indexData.constant.MarketType;
 import com.stockport.server.domain.indexData.entity.IndexData;
+import com.stockport.server.domain.stock.entity.StockCurrentPrice;
 import com.stockport.server.global.utils.KisParsingUtils;
 import lombok.Getter;
 
@@ -28,15 +29,14 @@ public class KisMultieStockCurrentPrice {
     @JsonProperty("prdy_ctrt")
     private String changeRate;         // 등락률
 
-    public IndexData toEntity(MarketType marketType, LocalDate baseDate) {
-        return IndexData.builder()
-                .marketType(marketType)
+    public StockCurrentPrice toEntity(LocalDate baseDate) {
+        return StockCurrentPrice.builder()
                 .baseDate(baseDate)
-                .closePrice(KisParsingUtils.parseDoubleSafe(currentPrice))
-                .openPrice(KisParsingUtils.parseDoubleSafe(openPrice))
-                .highPrice(KisParsingUtils.parseDoubleSafe(highPrice))
-                .lowPrice(KisParsingUtils.parseDoubleSafe(lowPrice))
-                .changeAmount(KisParsingUtils.parseDoubleSafe(changeAmount))
+                .currentPrice(KisParsingUtils.parseIntSafe(currentPrice))
+                .openPrice(KisParsingUtils.parseIntSafe(openPrice))
+                .highPrice(KisParsingUtils.parseIntSafe(highPrice))
+                .lowPrice(KisParsingUtils.parseIntSafe(lowPrice))
+                .changeAmount(KisParsingUtils.parseIntSafe(changeAmount))
                 .changeRate(KisParsingUtils.parseDoubleSafe(changeRate))
                 .build();
     }
