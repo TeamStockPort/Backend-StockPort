@@ -28,20 +28,20 @@ public class StockCurrentPrice extends BaseEntity {
     @Column(nullable = false)
     private LocalDate baseDate;         // 기준일
 
-    @Column(nullable = false)
-    private Integer openPrice;          // 시가
+    @Column(precision = 12, scale = 2)
+    private BigDecimal openPrice;          // 시가
 
-    @Column(nullable = false)
-    private Integer currentPrice;       // 현재가
+    @Column(precision = 12, scale = 2)
+    private BigDecimal currentPrice;       // 현재가
 
-    @Column(nullable = false)
-    private Integer highPrice;          // 고가
+    @Column(precision = 12, scale = 2)
+    private BigDecimal highPrice;          // 고가
 
-    @Column(nullable = false)
-    private Integer lowPrice;           // 저가
+    @Column(precision = 12, scale = 2)
+    private BigDecimal lowPrice;           // 저가
 
-    @Column(nullable = false)
-    private Integer changeAmount;       // 등락폭
+    @Column(precision = 12, scale = 2)
+    private BigDecimal changeAmount;       // 등락폭
 
     @Column(precision = 5, scale = 2)
     private BigDecimal changeRate;      // 등락률
@@ -50,11 +50,21 @@ public class StockCurrentPrice extends BaseEntity {
         this.stock = stock;
     }
 
+    public void updateCurrentPrice(StockCurrentPrice newCurrentPrice) {
+        this.baseDate = newCurrentPrice.getBaseDate();
+        this.openPrice = newCurrentPrice.getOpenPrice();
+        this.currentPrice = newCurrentPrice.getCurrentPrice();
+        this.highPrice = newCurrentPrice.getHighPrice();
+        this.lowPrice = newCurrentPrice.getLowPrice();
+        this.changeAmount = newCurrentPrice.getChangeAmount();
+        this.changeRate = newCurrentPrice.getChangeRate();
+    }
+
     @Builder
     public StockCurrentPrice(Stock stock, LocalDate baseDate,
-                             Integer openPrice, Integer currentPrice,
-                             Integer highPrice, Integer lowPrice,
-                             Integer changeAmount, BigDecimal changeRate) {
+                             BigDecimal openPrice, BigDecimal currentPrice,
+                             BigDecimal highPrice, BigDecimal lowPrice,
+                             BigDecimal changeAmount, BigDecimal changeRate) {
         this.stock = stock;
         this.baseDate = baseDate;
         this.openPrice = openPrice;
@@ -66,9 +76,9 @@ public class StockCurrentPrice extends BaseEntity {
     }
 
     public static StockCurrentPrice create(LocalDate baseDate,
-                                          Integer openPrice, Integer currentPrice,
-                                          Integer highPrice, Integer lowPrice,
-                                          Integer changeAmount, BigDecimal changeRate) {
+                                           BigDecimal openPrice, BigDecimal currentPrice,
+                                           BigDecimal highPrice, BigDecimal lowPrice,
+                                           BigDecimal changeAmount, BigDecimal changeRate) {
         return StockCurrentPrice.builder()
                 .baseDate(baseDate)
                 .openPrice(openPrice)

@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -40,12 +39,12 @@ public class KisIndexCurrentPrice {
         return IndexData.builder()
                 .marketType(marketType)
                 .baseDate(baseDate)
-                .closePrice(KisParsingUtils.parseDoubleSafe(currentPrice))
-                .openPrice(KisParsingUtils.parseDoubleSafe(openPrice))
-                .highPrice(KisParsingUtils.parseDoubleSafe(highPrice))
-                .lowPrice(KisParsingUtils.parseDoubleSafe(lowPrice))
-                .changeAmount(KisParsingUtils.parseDoubleSafe(changeAmount))
-                .changeRate(KisParsingUtils.parseDoubleSafe(changeRate))
+                .closePrice(KisParsingUtils.parseBigDecimalSafe(currentPrice))
+                .openPrice(KisParsingUtils.parseBigDecimalSafe(openPrice))
+                .highPrice(KisParsingUtils.parseBigDecimalSafe(highPrice))
+                .lowPrice(KisParsingUtils.parseBigDecimalSafe(lowPrice))
+                .changeAmount(KisParsingUtils.parseBigDecimalSafe(changeAmount))
+                .changeRate(KisParsingUtils.parseBigDecimalSafe(changeRate))
                 .build();
     }
 }

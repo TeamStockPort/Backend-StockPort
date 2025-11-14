@@ -54,14 +54,4 @@ public class StockUpdateController {
         stockService.updatePeriodicStockData(startDate, endDate);
         return ApiResponse.onSuccess("주가 데이터 업데이트 성공");
     }
-
-    @GetMapping("/update/historical-data")
-    @Operation(
-            summary = "과거 주식 데이터 전체 업데이트",
-            description = "과거 주식 데이터를 처음부터 현재까지 모두 업데이트 합니다. (1일 이상 소요)"
-    )
-    public ApiResponse<String> updateHistoricalStockData() {
-        stockService.updateHistoricalStockData();
-        return ApiResponse.onSuccess("과거 주가 데이터 전체 업데이트 성공");
-    }
 }

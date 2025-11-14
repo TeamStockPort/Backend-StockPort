@@ -31,23 +31,23 @@ public class StockPrice extends BaseEntity {
     @JoinColumn(name = "isin_cd", nullable = false)
     private Stock stock;
 
-    @Column(nullable = false)
+    @Column(precision = 12, scale = 2)
     private LocalDate baseDate; // 기준일
 
-    @Column(nullable = false)
-    private Integer openPrice;  // 시가
+    @Column(precision = 12, scale = 2)
+    private BigDecimal openPrice;  // 시가
 
-    @Column(nullable = false)
-    private Integer closePrice; // 종가
+    @Column(precision = 12, scale = 2)
+    private BigDecimal closePrice; // 종가
 
-    @Column(nullable = false)
-    private Integer highPrice;  // 고가
+    @Column(precision = 12, scale = 2)
+    private BigDecimal highPrice;  // 고가
 
-    @Column(nullable = false)
-    private Integer lowPrice;   // 저가
+    @Column(precision = 12, scale = 2)
+    private BigDecimal lowPrice;   // 저가
 
-    @Column(nullable = false)
-    private Integer changeAmount;   // 등락폭
+    @Column(precision = 12, scale = 2)
+    private BigDecimal changeAmount;   // 등락폭
 
     @Column(precision = 7, scale = 2)
     private BigDecimal changeRate;  // 등락률
@@ -59,8 +59,8 @@ public class StockPrice extends BaseEntity {
 
     @Builder
     public StockPrice(Stock stock, LocalDate baseDate,
-                      Integer openPrice, Integer closePrice, Integer highPrice,
-                      Integer lowPrice, Integer changeAmount, BigDecimal changeRate) {
+                      BigDecimal openPrice, BigDecimal closePrice, BigDecimal highPrice,
+                      BigDecimal lowPrice, BigDecimal changeAmount, BigDecimal changeRate) {
         this.stock = stock;
         this.baseDate = baseDate;
         this.openPrice = openPrice;
@@ -72,8 +72,8 @@ public class StockPrice extends BaseEntity {
     }
 
     public static StockPrice create(Stock stock, LocalDate baseDate,
-                                Integer closePrice, Integer openPrice, Integer highPrice,
-                                Integer lowPrice, Integer changeAmount, BigDecimal changeRate) {
+                                    BigDecimal closePrice, BigDecimal openPrice, BigDecimal highPrice,
+                                    BigDecimal lowPrice, BigDecimal changeAmount, BigDecimal changeRate) {
         return StockPrice.builder()
                 .stock(stock)
                 .baseDate(baseDate)

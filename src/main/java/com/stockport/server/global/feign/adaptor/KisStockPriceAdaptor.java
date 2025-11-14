@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
@@ -70,10 +71,10 @@ public class KisStockPriceAdaptor {
                                     "P",
                                     "J",
                                     stockCode,
-                                    "D",
-                                    "J",
-                                    startDate.format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE),
-                                    endDate.format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE)
+                                    startDate.format(DateTimeFormatter.BASIC_ISO_DATE),
+                                    endDate.format(DateTimeFormatter.BASIC_ISO_DATE),
+                            "D",
+                            "1"
                             )
                     );
 
@@ -81,7 +82,7 @@ public class KisStockPriceAdaptor {
                 throw new GeneralException(ErrorStatus.FEIGN_ERROR);
             }
 
-            log.info("[KIS] 기간별 주가 조회 성공: {} ({} ~ {})", stockCode, startDate, endDate);
+            log.info("[KIS] 기간별 주가 조회 성공: {} ({} ~ {}) {}개 조회", stockCode, startDate, endDate, response.getOutput2().size());
             return response;
 
         } catch (Exception e) {

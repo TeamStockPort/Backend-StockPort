@@ -38,7 +38,7 @@ public class KisIndexPeriodPrice {
     private String lowPrice;        // 저가
 
     private BigDecimal caculateChangeAmount(String closePrice, BigDecimal prevClosePrice) {
-        BigDecimal clpr = KisParsingUtils.parseDoubleSafe(closePrice);
+        BigDecimal clpr = KisParsingUtils.parseBigDecimalSafe(closePrice);
         return clpr.subtract(prevClosePrice);
     }
 
@@ -55,10 +55,10 @@ public class KisIndexPeriodPrice {
         return IndexData.builder()
                 .marketType(marketType)
                 .baseDate(KisParsingUtils.parseDateSafe(this.baseDate))
-                .closePrice(KisParsingUtils.parseDoubleSafe(this.closePrice))
-                .openPrice(KisParsingUtils.parseDoubleSafe(this.openPrice))
-                .highPrice(KisParsingUtils.parseDoubleSafe(this.highPrice))
-                .lowPrice(KisParsingUtils.parseDoubleSafe(this.lowPrice))
+                .closePrice(KisParsingUtils.parseBigDecimalSafe(this.closePrice))
+                .openPrice(KisParsingUtils.parseBigDecimalSafe(this.openPrice))
+                .highPrice(KisParsingUtils.parseBigDecimalSafe(this.highPrice))
+                .lowPrice(KisParsingUtils.parseBigDecimalSafe(this.lowPrice))
                 .changeAmount(caculateChangeAmount(this.closePrice, prevClosePrice))
                 .changeRate(caculateChangeRate(this.closePrice, prevClosePrice))
                 .build();
