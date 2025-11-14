@@ -37,11 +37,7 @@ public class StockServiceImpl implements StockService {
     private final StockRepository stockRepository;
     private final StockPriceRepository stockPriceRepository;
     private final KisStockPriceAdaptor kisStockPriceAdaptor;
-    private final StockCurrentPriceRepository stockCurrentPriceRepository;
     private final PeriodicStockSaver periodicSaver;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Override
     public Page<StockRankResponse> getStocksByMarketCap(Pageable pageable) {

@@ -26,8 +26,6 @@ public class KisIndexPriceAdaptor {
 
     public KisIndexCurrentPrice getIndexCurrentPrice(String indexCode) {
         try {
-            log.info("[KIS] 지수 조회 요청: indexCode={}", indexCode);
-
             String token = "Bearer " + tokenHolder.getAccessToken();
 
             KisResponseWrapper<KisIndexCurrentPrice> response =
