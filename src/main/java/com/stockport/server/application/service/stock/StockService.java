@@ -20,7 +20,5 @@ public interface StockService {
 
     void updatePeriodicStockData(LocalDate startDate, LocalDate endDate);
 
-    void updateHistoricalStockData();
-
     void saveDailyStockData();
 }
