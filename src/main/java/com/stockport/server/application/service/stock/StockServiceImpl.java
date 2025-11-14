@@ -68,7 +68,7 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public List<StockQueryResponse> searchStocks(String query) {
-        List<Stock> stocks = stockRepository.findTop10ByStockNameContainingIgnoreCaseOrStockCdContainingIgnoreCaseOrIsinCdContainingIgnoreCaseOrderByStockNameAsc(query, query, query);
+        List<Stock> stocks = stockRepository.findTop10ByStockNameContainingIgnoreCaseOrStockCdContainingIgnoreCaseOrIsinCdContainingIgnoreCaseOrderByMarketCapDesc(query, query, query);
 
         return stocks.stream()
                 .map(StockQueryResponse::of)
@@ -91,10 +91,9 @@ public class StockServiceImpl implements StockService {
                     .map(currentPrice -> currentPrice.toEntity(LocalDate.now()))
                     .toList();
 
-            for (int i = 0; i < Math.min(30, stockList.size()); i++) {
+            for (int i = 0; i < Math.min(30, stockList.size()); i++)
                 stockList.get(i).updateCurrentPriceInfo(stockCurrentPriceList.get(i));
-                stockCurrentPriceList.get(i).updateStock(stockList.get(i));
-            }
+
         }
         log.info("[stock] 현재 주가 데이터 업데이트 완료");
     }
