@@ -7,6 +7,7 @@ import com.stockport.server.application.controller.stock.dto.StockRankResponse;
 import com.stockport.server.domain.stock.entity.Stock;
 import com.stockport.server.domain.stock.entity.StockCurrentPrice;
 import com.stockport.server.domain.stock.entity.StockPrice;
+import com.stockport.server.domain.stock.repository.StockCurrentPriceRepository;
 import com.stockport.server.domain.stock.repository.StockPriceRepository;
 import com.stockport.server.domain.stock.repository.StockRepository;
 import com.stockport.server.global.apipayload.code.status.ErrorStatus;
@@ -36,6 +37,7 @@ public class StockServiceImpl implements StockService {
     private final StockRepository stockRepository;
     private final StockPriceRepository stockPriceRepository;
     private final KisStockPriceAdaptor kisStockPriceAdaptor;
+    private final StockCurrentPriceRepository stockCurrentPriceRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -82,12 +84,17 @@ public class StockServiceImpl implements StockService {
             List<String> stockCdList = stockList.stream()
                     .map(Stock::getStockCd)
                     .toList();
-            List<StockCurrentPrice> stockCurrentPriceList = kisStockPriceAdaptor.getMultiStockCurrentPrice(stockCdList).getOutput().stream()
+
+            List<KisMultieStockCurrentPrice> output = kisStockPriceAdaptor.getMultiStockCurrentPrice(stockCdList).getOutput();
+
+            List<StockCurrentPrice> stockCurrentPriceList = output.stream()
                     .map(currentPrice -> currentPrice.toEntity(LocalDate.now()))
                     .toList();
 
-            for (int i = 0; i < Math.min(30, stockList.size()); i++)
+            for (int i = 0; i < Math.min(30, stockList.size()); i++) {
                 stockList.get(i).updateCurrentPriceInfo(stockCurrentPriceList.get(i));
+                stockCurrentPriceList.get(i).updateStock(stockList.get(i));
+            }
         }
         log.info("[stock] 현재 주가 데이터 업데이트 완료");
     }

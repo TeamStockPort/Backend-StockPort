@@ -12,11 +12,11 @@ import java.time.LocalDate;
 @Builder
 public class StockPriceResponse {
     private LocalDate baseDate;
-    private Integer openPrice;
-    private Integer highPrice;
-    private Integer lowPrice;
-    private Integer closePrice;
-    private Integer changeAmount;
+    private BigDecimal openPrice;
+    private BigDecimal highPrice;
+    private BigDecimal lowPrice;
+    private BigDecimal closePrice;
+    private BigDecimal changeAmount;
     private BigDecimal changeRate;
 
     public static StockPriceResponse of(StockCurrentPrice stockCurrentPrice) {

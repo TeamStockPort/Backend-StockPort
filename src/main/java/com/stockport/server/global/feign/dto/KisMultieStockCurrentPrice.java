@@ -1,8 +1,6 @@
 package com.stockport.server.global.feign.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.stockport.server.domain.indexData.constant.MarketType;
-import com.stockport.server.domain.indexData.entity.IndexData;
 import com.stockport.server.domain.stock.entity.StockCurrentPrice;
 import com.stockport.server.global.utils.KisParsingUtils;
 import lombok.Getter;
@@ -32,12 +30,12 @@ public class KisMultieStockCurrentPrice {
     public StockCurrentPrice toEntity(LocalDate baseDate) {
         return StockCurrentPrice.builder()
                 .baseDate(baseDate)
-                .currentPrice(KisParsingUtils.parseIntSafe(currentPrice))
-                .openPrice(KisParsingUtils.parseIntSafe(openPrice))
-                .highPrice(KisParsingUtils.parseIntSafe(highPrice))
-                .lowPrice(KisParsingUtils.parseIntSafe(lowPrice))
-                .changeAmount(KisParsingUtils.parseIntSafe(changeAmount))
-                .changeRate(KisParsingUtils.parseDoubleSafe(changeRate))
+                .currentPrice(KisParsingUtils.parseBigDecimalSafe(currentPrice))
+                .openPrice(KisParsingUtils.parseBigDecimalSafe(openPrice))
+                .highPrice(KisParsingUtils.parseBigDecimalSafe(highPrice))
+                .lowPrice(KisParsingUtils.parseBigDecimalSafe(lowPrice))
+                .changeAmount(KisParsingUtils.parseBigDecimalSafe(changeAmount))
+                .changeRate(KisParsingUtils.parseBigDecimalSafe(changeRate))
                 .build();
     }
 }

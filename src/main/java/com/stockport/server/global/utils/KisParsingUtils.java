@@ -11,15 +11,10 @@ public final class KisParsingUtils {
 
     private KisParsingUtils() {} // 인스턴스화 방지
 
-    public static Integer parseIntSafe(String val) {
-        try {
-            return Integer.parseInt(val);
-        } catch (Exception e) {
-            throw new GeneralException(ErrorStatus.PARSE_ERROR);
-        }
-    }
-
     public static BigDecimal parseBigDecimalSafe(String val) {
+        if (val == null || val.isEmpty())
+            return BigDecimal.ZERO;
+
         try {
             return new BigDecimal(val);
         } catch (Exception e) {
@@ -30,14 +25,6 @@ public final class KisParsingUtils {
     public static LocalDate parseDateSafe(String val) {
         try {
             return LocalDate.parse(val, DateTimeFormatter.ofPattern("yyyyMMdd"));
-        } catch (Exception e) {
-            throw new GeneralException(ErrorStatus.PARSE_ERROR);
-        }
-    }
-
-    public static BigDecimal parseDoubleSafe(String val) {
-        try {
-            return new BigDecimal(val);
         } catch (Exception e) {
             throw new GeneralException(ErrorStatus.PARSE_ERROR);
         }

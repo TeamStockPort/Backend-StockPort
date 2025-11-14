@@ -1,20 +1,12 @@
 package com.stockport.server.global.feign.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.stockport.server.domain.stock.entity.Stock;
 import com.stockport.server.domain.stock.entity.StockCurrentPrice;
-import com.stockport.server.domain.stock.entity.StockPrice;
-import com.stockport.server.global.apipayload.code.status.ErrorStatus;
-import com.stockport.server.global.exception.GeneralException;
 import com.stockport.server.global.utils.KisParsingUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Getter
 @Builder
@@ -41,12 +33,12 @@ public class KisStockCurrentPrice {
 
     public StockCurrentPrice toEntity() {
         return StockCurrentPrice.builder()
-                .openPrice(KisParsingUtils.parseIntSafe(this.openPrice))
-                .currentPrice(KisParsingUtils.parseIntSafe(this.currentPrice))
-                .highPrice(KisParsingUtils.parseIntSafe(this.highPrice))
-                .lowPrice(KisParsingUtils.parseIntSafe(this.lowPrice))
-                .changeAmount(KisParsingUtils.parseIntSafe(this.changeAmount))
-                .changeRate(KisParsingUtils.parseDoubleSafe(this.changeRate))
+                .openPrice(KisParsingUtils.parseBigDecimalSafe(this.openPrice))
+                .currentPrice(KisParsingUtils.parseBigDecimalSafe(this.currentPrice))
+                .highPrice(KisParsingUtils.parseBigDecimalSafe(this.highPrice))
+                .lowPrice(KisParsingUtils.parseBigDecimalSafe(this.lowPrice))
+                .changeAmount(KisParsingUtils.parseBigDecimalSafe(this.changeAmount))
+                .changeRate(KisParsingUtils.parseBigDecimalSafe(this.changeRate))
                 .build();
     }
 

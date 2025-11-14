@@ -40,17 +40,18 @@ public class Stock extends BaseEntity {
     private List<StockPrice> stockPrices;           // 과거 주가 정보
 
     public void updateCurrentPriceInfo(StockCurrentPrice newCurrentPriceInfo) {
-        if (this.currentPriceInfo != null)
-            this.currentPriceInfo.updateStock(null);
+        if (this.currentPriceInfo == null) {
+            this.currentPriceInfo = newCurrentPriceInfo;
+            newCurrentPriceInfo.updateStock(this);
+            return;
+        }
 
-        this.currentPriceInfo = newCurrentPriceInfo;
-        newCurrentPriceInfo.updateStock(this);
-
+        this.currentPriceInfo.updateCurrentPrice(newCurrentPriceInfo);
         updateMarketCap();
     }
 
     public void updateMarketCap() {
-        this.marketCap = currentPriceInfo.getCurrentPrice() * this.listedShares;
+        this.marketCap = currentPriceInfo.getCurrentPrice().toBigInteger().longValue() * this.listedShares;
     }
 
     @Builder

@@ -64,4 +64,5 @@ public class StockUpdateController {
         stockService.updateHistoricalStockData();
         return ApiResponse.onSuccess("과거 주가 데이터 전체 업데이트 성공");
     }
+
 }
