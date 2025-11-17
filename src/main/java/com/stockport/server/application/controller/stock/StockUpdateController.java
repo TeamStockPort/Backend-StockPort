@@ -54,4 +54,14 @@ public class StockUpdateController {
         stockService.updatePeriodicStockData(startDate, endDate);
         return ApiResponse.onSuccess("주가 데이터 업데이트 성공");
     }
+
+    @GetMapping("/update/stock-data")
+    @Operation(
+            summary = "주식 데이터 강제 업데이트",
+            description = "주식 데이터를 강제 업데이트합니다."
+    )
+    public ApiResponse<String> updateErrorStockData(@RequestParam String stockCd) {
+        stockService.forceUpdateStockData(stockCd);
+        return ApiResponse.onSuccess("오류 주가 데이터 재업데이트 성공");
+    }
 }

@@ -5,6 +5,7 @@ import com.stockport.server.application.controller.backtest.dto.request.Backtest
 import com.stockport.server.application.controller.backtest.dto.request.RebalanceCycle;
 import com.stockport.server.application.controller.backtest.dto.response.BacktestResponse;
 import com.stockport.server.application.controller.backtest.dto.response.PortfolioValue;
+import com.stockport.server.application.controller.backtest.dto.response.SummaryReport;
 import com.stockport.server.domain.indexData.constant.MarketType;
 import com.stockport.server.domain.indexData.entity.IndexData;
 import com.stockport.server.domain.indexData.repository.IndexDataRepository;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.sound.sampled.Port;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -39,10 +39,27 @@ public class BacktestServiceImpl implements BacktestService {
                 .kospiSummary(null)
                 .kosdaqSummary(null)
                 .portfolioSummary(null)
-                .monthlyAssets(null)
+                .monthlyAssets(calcuateMonthlyAssets(portfolioReturns))
                 .monthlyDrawdowns(monthlyDrawdonws)
                 .monthlyReturns(caculateMonthlyReturns(portfolioReturns))
                 .build();
+    }
+
+    private SummaryReport caculateSummaryReport() {
+        return null;
+    }
+
+    private List<PortfolioValue> calcuateMonthlyAssets(List<PortfolioValue> protfolioReturns) {
+        LocalDate monthBoundaryDate = protfolioReturns.get(0).getDate().withDayOfMonth(1);
+        List<PortfolioValue> monthlyAssetList = new ArrayList<>();
+
+        for (PortfolioValue pv : protfolioReturns) {
+            if (pv.getDate().isBefore(monthBoundaryDate)) continue;
+
+            monthlyAssetList.add(PortfolioValue.create(pv.getDate(), pv.getValue()));
+            monthBoundaryDate = monthBoundaryDate.plusMonths(1).withDayOfMonth(1);
+        }
+        return monthlyAssetList;
     }
 
     private List<PortfolioValue> caculateMonthlyReturns(List<PortfolioValue> portfolioReturns) {
@@ -83,7 +100,8 @@ public class BacktestServiceImpl implements BacktestService {
 
             BigDecimal drawdown = peak.subtract(pv.getValue())
                     .multiply(BigDecimal.valueOf(100))
-                    .divide(peak, 2, RoundingMode.HALF_EVEN);
+                    .divide(peak, 2, RoundingMode.HALF_EVEN)
+                    .negate();
 
             if (drawdown.compareTo(mdd) > 0)
                 mdd = drawdown;
@@ -101,10 +119,15 @@ public class BacktestServiceImpl implements BacktestService {
         );
 
         List<PortfolioValue> portfolioValueList = new ArrayList<>();
-        BigDecimal stockQuantity = initialCapital.divide(indexDataList.get(0).getClosePrice(), RoundingMode.DOWN);
+        BigDecimal stockQuantity = initialCapital.divide(indexDataList.get(0).getClosePrice(), RoundingMode.HALF_EVEN);
         BigDecimal remainingCash = initialCapital.subtract(stockQuantity.multiply(indexDataList.get(0).getClosePrice()));
         for (IndexData indexData : indexDataList) {
-            portfolioValueList.add(PortfolioValue.create(indexData.getBaseDate(), stockQuantity.multiply(indexData.getClosePrice()).add(remainingCash)));
+            portfolioValueList.add(PortfolioValue.create(
+                    indexData.getBaseDate(),
+                    stockQuantity.multiply(indexData.getClosePrice())
+                            .add(remainingCash)
+                            .setScale(2, RoundingMode.HALF_EVEN)
+            ));
         }
 
         return portfolioValueList;
@@ -124,7 +147,9 @@ public class BacktestServiceImpl implements BacktestService {
         List<PortfolioValue> portfolioValueList = new ArrayList<>();
 
         for (List<StockPrice> dailyStockPriceList : dailyStockPriceLists) {
-            capital = caculatePortfolioValue(stockQuantityList, dailyStockPriceList).add(remaingCash);
+            capital = caculatePortfolioValue(stockQuantityList, dailyStockPriceList)
+                    .add(remaingCash)
+                    .setScale(2, RoundingMode.HALF_EVEN);
             currentDate = dailyStockPriceList.get(0).getBaseDate();
 
             if (checkRebalance(currentDate, lastRebalanceDate, request.getRebalanceCycle())) {

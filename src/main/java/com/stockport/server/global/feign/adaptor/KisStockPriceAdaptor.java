@@ -74,7 +74,7 @@ public class KisStockPriceAdaptor {
                                     startDate.format(DateTimeFormatter.BASIC_ISO_DATE),
                                     endDate.format(DateTimeFormatter.BASIC_ISO_DATE),
                             "D",
-                            "1"
+                            "0"
                             )
                     );
 

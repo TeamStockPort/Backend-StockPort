@@ -27,4 +27,6 @@ public interface StockPriceRepository extends JpaRepository<StockPrice, Long> {
     );
 
     List<StockPrice> findAllByBaseDate(LocalDate today);
+
+    void deleteAllByStock(Stock stock);
 }
