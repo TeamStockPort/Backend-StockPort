@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.sound.sampled.Port;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -32,7 +33,6 @@ public class BacktestServiceImpl implements BacktestService {
         List<PortfolioValue> kospiReturns = caculateIndexReturns(request, MarketType.KOSPI);
         List<PortfolioValue> kosdaqReturns = caculateIndexReturns(request, MarketType.KOSDAQ);
         List<PortfolioValue> portfolioReturns = calculatePortfolioReturns(request);
-
         List<PortfolioValue> monthlyDrawdonws = caculateMDD(portfolioReturns);
 
         return BacktestResponse.builder()
@@ -41,8 +41,28 @@ public class BacktestServiceImpl implements BacktestService {
                 .portfolioSummary(null)
                 .monthlyAssets(null)
                 .monthlyDrawdowns(monthlyDrawdonws)
-                .monthlyReturns(null)
+                .monthlyReturns(caculateMonthlyReturns(portfolioReturns))
                 .build();
+    }
+
+    private List<PortfolioValue> caculateMonthlyReturns(List<PortfolioValue> portfolioReturns) {
+        LocalDate monthBoundaryDate = portfolioReturns.get(0).getDate().plusMonths(1).withDayOfMonth(1);
+        List<PortfolioValue> monthlyReturnList = new ArrayList<>();
+
+        BigDecimal monthStartValue = portfolioReturns.get(0).getValue();
+        for (PortfolioValue pv : portfolioReturns) {
+            if (pv.getDate().isBefore(monthBoundaryDate)) continue;
+
+            BigDecimal monthEndValue = portfolioReturns.get(portfolioReturns.indexOf(pv) - 1).getValue();
+            BigDecimal monthlyReturn = monthEndValue.subtract(monthStartValue)
+                    .multiply(BigDecimal.valueOf(100))
+                    .divide(monthStartValue, 2, RoundingMode.HALF_EVEN);
+            monthlyReturnList.add(PortfolioValue.create(monthBoundaryDate, monthlyReturn));
+
+            monthBoundaryDate = monthBoundaryDate.plusMonths(1).withDayOfMonth(1);
+            monthStartValue = pv.getValue();
+        }
+        return monthlyReturnList;
     }
 
     private List<PortfolioValue> caculateMDD(List<PortfolioValue> portfolioReturns) {
