@@ -46,7 +46,7 @@ public class IndexDataServiceImpl implements IndexDataService {
     @Transactional
     public void updateHistoricalIndexData(MarketType marketType) {
         LocalDate endDate = LocalDate.now();
-        LocalDate startDate = endDate.minusYears(10);
+        LocalDate startDate = LocalDate.of(1980, 1, 4); // KOSPI 시작일 기준
 
         List<KisIndexPeriodPrice> indexPeriodPriceList = new ArrayList<>();
 

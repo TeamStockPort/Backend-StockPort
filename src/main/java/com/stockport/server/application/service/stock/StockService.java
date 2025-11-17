@@ -23,4 +23,6 @@ public interface StockService {
     void forceUpdateStockData(String stockCd);
 
     void saveDailyStockData();
+
+    void updateAllStockPriceData();
 }

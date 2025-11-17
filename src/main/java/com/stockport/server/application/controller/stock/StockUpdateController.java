@@ -64,4 +64,14 @@ public class StockUpdateController {
         stockService.forceUpdateStockData(stockCd);
         return ApiResponse.onSuccess("오류 주가 데이터 재업데이트 성공");
     }
+
+    @GetMapping("/update/all-stock-prices")
+    @Operation(
+            summary = "모든 주식 가격 데이터 업데이트",
+            description = "모든 주식의 가격 데이터를 업데이트합니다. (오래 걸릴 수 있음)"
+    )
+    public ApiResponse<String> updateAllStockPriceData() {
+        stockService.updateAllStockPriceData();
+        return ApiResponse.onSuccess("모든 주식 가격 데이터 업데이트 성공");
+    }
 }
