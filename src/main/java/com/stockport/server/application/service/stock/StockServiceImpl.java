@@ -79,7 +79,7 @@ public class StockServiceImpl implements StockService {
     @Transactional
     public void updateCurrentStockData() {
         List<Stock> stocks = stockRepository.findAll();
-        for (int stockIdx = 0; stockIdx < stocks.size() / 30; stockIdx++) {
+        for (int stockIdx = 0; stockIdx <= stocks.size() / 30; stockIdx++) {
             List<Stock> stockList = stocks.subList(stockIdx * 30, Math.min((stockIdx + 1) * 30, stocks.size()));
             List<String> stockCdList = stockList.stream()
                     .map(Stock::getStockCd)
@@ -141,6 +141,11 @@ public class StockServiceImpl implements StockService {
         for (Stock stock : stockList) {
             if (savedId.contains(stock.getStockCd()))
                 continue;
+            if (stock.getCurrentPriceInfo() == null) {
+                log.info("[stock] 일간 주가 데이터 저장 건너뜀: {} {} (현재가 정보 없음)", stock.getStockName(), stock.getStockCd());
+                continue;
+            }
+
             StockPrice stockPrice = stock.getCurrentPriceInfo().toStockPriceEntity();
             stockPrice.updateStock(stock);
 
