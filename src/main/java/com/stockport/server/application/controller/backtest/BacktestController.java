@@ -20,6 +20,7 @@ public class BacktestController {
 
     @PostMapping
     public ResponseEntity<BacktestResponse> runBacktest(@RequestBody BacktestRequest request) {
+        backtestService.validateRequest(request);
         return ResponseEntity.ok(backtestService.runBacktest(request));
     }
 }

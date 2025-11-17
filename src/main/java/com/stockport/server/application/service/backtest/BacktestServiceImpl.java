@@ -9,8 +9,12 @@ import com.stockport.server.application.controller.backtest.dto.response.Summary
 import com.stockport.server.domain.indexData.constant.MarketType;
 import com.stockport.server.domain.indexData.entity.IndexData;
 import com.stockport.server.domain.indexData.repository.IndexDataRepository;
+import com.stockport.server.domain.stock.entity.Stock;
 import com.stockport.server.domain.stock.entity.StockPrice;
 import com.stockport.server.domain.stock.repository.StockPriceRepository;
+import com.stockport.server.domain.stock.repository.StockRepository;
+import com.stockport.server.global.apipayload.code.status.ErrorStatus;
+import com.stockport.server.global.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +30,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BacktestServiceImpl implements BacktestService {
+    private final StockRepository stockRepository;
     private final StockPriceRepository stockPriceRepository;
     private final IndexDataRepository indexDataRepository;
 
@@ -43,6 +48,31 @@ public class BacktestServiceImpl implements BacktestService {
                 .monthlyDrawdowns(calculateMDD(portfolioValues))
                 .monthlyReturns(calculateMonthlyReturns(portfolioValues))
                 .build();
+    }
+
+    @Override
+    public void validateRequest(BacktestRequest request) {
+        LocalDate startDate = request.getStartDate();
+        LocalDate endDate = request.getEndDate();
+
+        if (startDate.isAfter(endDate))
+            throw new GeneralException(ErrorStatus.BACKTEST_INVALID_DATE_RANGE);
+
+        List<AssetRequest> assets = request.getAssets();
+        int totalWeight = assets.stream()
+                .mapToInt(AssetRequest::getWeight)
+                .sum();
+
+        if (totalWeight != 100) {
+            throw new GeneralException(ErrorStatus.BACKTEST_INVALID_WEIGHTS);
+        }
+
+        for (AssetRequest asset : assets) {
+            Stock stock = stockRepository.findByStockCd(asset.getStockCd()).orElseThrow(() ->
+                    new GeneralException(ErrorStatus.STOCK_NOT_FOUND));
+            if (startDate.isBefore(stockPriceRepository.findTopByStockOrderByBaseDateAsc(stock).getBaseDate()))
+                throw new GeneralException(ErrorStatus.BACKTEST_INVALID_DATE_RANGE);
+        }
     }
 
     private SummaryReport calculateSummaryReport(List<PortfolioValue> values, String portfolioName) {

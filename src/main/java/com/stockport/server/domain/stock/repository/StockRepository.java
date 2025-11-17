@@ -13,4 +13,5 @@ public interface StockRepository extends JpaRepository<Stock, String> {
     Optional<Stock> findByStockCd(String stockCd);
     List<Stock> findTop10ByStockNameContainingIgnoreCaseOrStockCdContainingIgnoreCaseOrIsinCdContainingIgnoreCaseOrderByMarketCapDesc(
             String name, String code, String isin
-    );}
+    );
+}

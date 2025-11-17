@@ -19,7 +19,11 @@ public enum ErrorStatus implements BaseCode {
 
     INDEX_DATA_NOT_FOUND(HttpStatus.BAD_REQUEST, "INDEX4001", "지수 데이터가 존재하지 않습니다."),
 
-    STOCK_NOT_FOUND(HttpStatus.BAD_REQUEST, "STOCK4001", "해당 종목을 찾을 수 없습니다."),;
+    STOCK_NOT_FOUND(HttpStatus.BAD_REQUEST, "STOCK4001", "해당 종목을 찾을 수 없습니다."),
+
+    BACKTEST_INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "BACKTEST4001", "백테스트 기간이 유효하지 않습니다."),
+    BACKTEST_INVALID_START_DATE(HttpStatus.BAD_REQUEST, "BACKTEST4002", "백테스트 시작 일자가 유효하지 않습니다."),
+    BACKTEST_INVALID_WEIGHTS(HttpStatus.BAD_REQUEST, "BACKTEST4004", "포트폴리오 가중치 합이 100%가 아닙니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

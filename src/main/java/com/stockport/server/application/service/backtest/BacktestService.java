@@ -5,4 +5,5 @@ import com.stockport.server.application.controller.backtest.dto.response.Backtes
 
 public interface BacktestService {
     BacktestResponse runBacktest(BacktestRequest request);
+    void validateRequest(BacktestRequest request);
 }
