@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface StockPriceRepository extends JpaRepository<StockPrice, Long> {
     List<StockPrice> findByStockAndBaseDateBetweenOrderByBaseDateDesc(Stock stock, LocalDate startDate, LocalDate endDate);
+    List<StockPrice> findByStockStockCdAndBaseDateBetweenOrderByBaseDateAsc(String stockCode, LocalDate startDate, LocalDate endDate);
 
     @Query("""
     select sp.baseDate

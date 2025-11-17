@@ -5,19 +5,155 @@ import com.stockport.server.application.controller.backtest.dto.request.Backtest
 import com.stockport.server.application.controller.backtest.dto.request.RebalanceCycle;
 import com.stockport.server.application.controller.backtest.dto.response.BacktestResponse;
 import com.stockport.server.application.controller.backtest.dto.response.PortfolioReturn;
+import com.stockport.server.domain.indexData.constant.MarketType;
+import com.stockport.server.domain.indexData.entity.IndexData;
+import com.stockport.server.domain.indexData.repository.IndexDataRepository;
+import com.stockport.server.domain.stock.entity.StockPrice;
+import com.stockport.server.domain.stock.repository.StockPriceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class BacktestServiceImpl implements BacktestService {
+    private final StockPriceRepository stockPriceRepository;
+    private final IndexDataRepository indexDataRepository;
+
     @Override
     public BacktestResponse runBacktest(BacktestRequest request) {
+        List<PortfolioReturn> kospiReturns = caculateIndexReturns(request, MarketType.KOSPI);
+        List<PortfolioReturn> kosdaqReturns = caculateIndexReturns(request, MarketType.KOSDAQ);
+        List<PortfolioReturn> portfolioReturns = calculatePortfolioReturns(request);
         return null;
+    }
+
+    private List<PortfolioReturn> caculateIndexReturns(BacktestRequest request, MarketType marketType) {
+        LocalDate startDate = request.getStartDate();
+        LocalDate endDate = request.getEndDate();
+        BigDecimal initialCapital = BigDecimal.valueOf(request.getInitialCapital()).setScale(2, RoundingMode.HALF_EVEN);
+
+        List<IndexData> indexDataList = indexDataRepository.findAllByMarketTypeAndBaseDateBetweenOrderByBaseDateAsc(
+                marketType, startDate, endDate
+        );
+
+        List<PortfolioReturn> portfolioReturnList = new ArrayList<>();
+        BigDecimal stockQuantity = initialCapital.divide(indexDataList.get(0).getClosePrice(), RoundingMode.DOWN);
+        BigDecimal remainingCash = initialCapital.subtract(stockQuantity.multiply(indexDataList.get(0).getClosePrice()));
+        LocalDate currentDate = startDate;
+        for (IndexData indexData : indexDataList) {
+            if (indexData.getBaseDate().isBefore(currentDate))
+                continue;
+            currentDate = indexData.getBaseDate();
+            portfolioReturnList.add(PortfolioReturn.create(currentDate, stockQuantity.multiply(indexData.getClosePrice()).add(remainingCash)));
+            currentDate = currentDate.plusMonths(1).withDayOfMonth(1);
+        }
+
+        return portfolioReturnList;
+    }
+
+    private List<PortfolioReturn> calculatePortfolioReturns(BacktestRequest request) {
+        LocalDate startDate = request.getStartDate();
+        LocalDate endDate = request.getEndDate();
+        BigDecimal capital = BigDecimal.valueOf(request.getInitialCapital()).setScale(2, RoundingMode.HALF_EVEN);
+        List<AssetRequest> assets = request.getAssets();
+
+        List<List<StockPrice>> dailyStockPriceLists = getDailyStockPriceList(assets, startDate, endDate);
+        LocalDate currentDate = startDate;
+        LocalDate lastRebalanceDate = startDate.minusYears(2);
+        List<BigDecimal> stockQuantityList = calculateStockQuantities(capital, assets, dailyStockPriceLists.get(0));
+        BigDecimal remaingCash = caculateRemainingCash(capital, stockQuantityList, dailyStockPriceLists.get(0));
+        List<PortfolioReturn> portfolioReturnList = new ArrayList<>();
+
+        for (List<StockPrice> dailyStockPriceList : dailyStockPriceLists) {
+            if (dailyStockPriceList.get(0).getBaseDate().isBefore(currentDate))
+                continue;
+
+            capital = caculatePortfolioValue(stockQuantityList, dailyStockPriceList).add(remaingCash);
+
+            currentDate = dailyStockPriceList.get(0).getBaseDate();
+
+            if (checkRebalance(currentDate, lastRebalanceDate, request.getRebalanceCycle())) {
+                stockQuantityList = calculateStockQuantities(capital, assets, dailyStockPriceList);
+                remaingCash = caculateRemainingCash(capital, stockQuantityList, dailyStockPriceList);
+                lastRebalanceDate = currentDate;
+            }
+
+            portfolioReturnList.add(PortfolioReturn.create(currentDate, capital));
+
+            currentDate = currentDate.plusMonths(1).withDayOfMonth(1);
+        }
+
+        return portfolioReturnList;
+    }
+
+    private BigDecimal caculateRemainingCash(BigDecimal initialCapital, List<BigDecimal> stockQuantityList, List<StockPrice> dailyStockPriceList) {
+        BigDecimal usedCapital = BigDecimal.ZERO;
+        for (int i = 0; i < stockQuantityList.size(); i++) {
+            BigDecimal stockQuantity = stockQuantityList.get(i);
+            StockPrice stockPrice = dailyStockPriceList.get(i);
+            usedCapital = usedCapital.add(stockQuantity.multiply(stockPrice.getClosePrice()));
+        }
+        return initialCapital.subtract(usedCapital);
+    }
+
+    private BigDecimal caculatePortfolioValue(List<BigDecimal> stockQuantityList, List<StockPrice> dailyStockPriceList) {
+        BigDecimal portfolioValue = BigDecimal.ZERO;
+        for (int i = 0; i < stockQuantityList.size(); i++) {
+            BigDecimal stockQuantity = stockQuantityList.get(i);
+            StockPrice stockPrice = dailyStockPriceList.get(i);
+            portfolioValue = portfolioValue.add(stockQuantity.multiply(stockPrice.getClosePrice()));
+        }
+        return portfolioValue;
+    }
+
+    private List<BigDecimal> calculateStockQuantities(BigDecimal capital, List<AssetRequest> assets, List<StockPrice> stockPriceListByStocks) {
+        List<BigDecimal> stockQuantityList = new ArrayList<>();
+        for (int i = 0; i < assets.size(); i++) {
+            AssetRequest asset = assets.get(i);
+            StockPrice stockPrice = stockPriceListByStocks.get(i);
+            BigDecimal allocation = capital
+                    .multiply(BigDecimal.valueOf(asset.getWeight()))
+                    .divide(BigDecimal.valueOf(100), RoundingMode.DOWN);
+            BigDecimal stockQuantity = allocation.divide(stockPrice.getClosePrice(), RoundingMode.DOWN);
+            stockQuantityList.add(stockQuantity);
+        }
+        return stockQuantityList;
+    }
+
+    private List<List<StockPrice>> getDailyStockPriceList(List<AssetRequest> assets, LocalDate startDate, LocalDate endDate) {
+        List<List<StockPrice>> stockPriceLists = new ArrayList<>();
+        for (AssetRequest asset : assets) {
+            List<StockPrice> stockPriceListByStock = stockPriceRepository.findByStockStockCdAndBaseDateBetweenOrderByBaseDateAsc(
+                    asset.getStockCd(), startDate, endDate
+            );
+            stockPriceLists.add(stockPriceListByStock);
+        }
+
+        List<List<StockPrice>> dailyStockPriceList = new ArrayList<>();
+        for (int i = 0; i < stockPriceLists.get(0).size(); i++) {
+            List<StockPrice> dailyPrices = new ArrayList<>();
+            for (List<StockPrice> stockPrices : stockPriceLists) {
+                dailyPrices.add(stockPrices.get(i));
+            }
+            dailyStockPriceList.add(dailyPrices);
+        }
+
+        return dailyStockPriceList;
+    }
+
+    private boolean checkRebalance(LocalDate currentDate, LocalDate lastRebalanceDate, RebalanceCycle rebalanceCycle) {
+        return switch (rebalanceCycle) {
+            case MONTHLY -> currentDate.isAfter(lastRebalanceDate.plusMonths(1));
+            case QUARTERLY -> currentDate.isAfter(lastRebalanceDate.plusMonths(3));
+            case YEARLY -> currentDate.isAfter(lastRebalanceDate.plusYears(1));
+        };
     }
 }
