@@ -115,6 +115,20 @@ public class StockServiceImpl implements StockService {
 
     @Override
     @Transactional
+    public void forceUpdateStockData(String stockCd) {
+        Stock stock = stockRepository.findByStockCd(stockCd)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.STOCK_NOT_FOUND));
+
+        stockPriceRepository.deleteAllByStock(stock);
+        for (LocalDate updateDate = LocalDate.now().minusYears(10).withMonth(1); updateDate.isBefore(LocalDate.now()); updateDate = updateDate.plusDays(140)) {
+            periodicSaver.saveOnePeriod(stock, updateDate, updateDate.plusDays(139));
+        }
+
+        log.info("[stock] 강제 주가 데이터 업데이트 완료: {}", stock.getStockCd());
+    }
+
+    @Override
+    @Transactional
     public void saveDailyStockData() {
         LocalDate today = LocalDate.now();
 

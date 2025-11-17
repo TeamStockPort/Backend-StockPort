@@ -20,5 +20,7 @@ public interface StockService {
 
     void updatePeriodicStockData(LocalDate startDate, LocalDate endDate);
 
+    void forceUpdateStockData(String stockCd);
+
     void saveDailyStockData();
 }
