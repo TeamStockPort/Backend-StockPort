@@ -10,8 +10,10 @@ import java.util.List;
 @Setter
 @Builder
 public class BacktestResponse {
-    private List<SummaryReport> summaryReport;
-    private List<MonthlyAsset> monthlyAssets;
-    private List<MonthlyDrawdown> monthlyDrawdowns;
-    private List<PortfolioReturn> annualReturns;
+    private SummaryReport kospiSummary;
+    private SummaryReport kosdaqSummary;
+    private SummaryReport portfolioSummary;
+    private List<PortfolioValue> monthlyDrawdowns;
+    private List<PortfolioValue> monthlyAssets;
+    private List<PortfolioValue> monthlyReturns;
 }

@@ -10,14 +10,14 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class PortfolioReturn {
+public class PortfolioValue {
     private LocalDate date;
-    private BigDecimal returnRate;
+    private BigDecimal value;
 
-    public static PortfolioReturn create(LocalDate date, BigDecimal returnRate) {
-        return PortfolioReturn.builder()
+    public static PortfolioValue create(LocalDate date, BigDecimal returnRate) {
+        return PortfolioValue.builder()
                 .date(date)
-                .returnRate(returnRate)
+                .value(returnRate)
                 .build();
     }
 }
