@@ -61,7 +61,7 @@ public class StockServiceImpl implements StockService {
     public StockInfoResponse getStockInfo(String stockCode, LocalDate startDate, LocalDate endDate) {
         Stock stock = stockRepository.findByStockCd(stockCode)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.STOCK_NOT_FOUND));
-        List<StockPriceResponse> stockPriceResponseList = stockPriceRepository.findByStockAndBaseDateBetween(stock, startDate, endDate)
+        List<StockPriceResponse> stockPriceResponseList = stockPriceRepository.findByStockAndBaseDateBetweenOrderByBaseDateDesc(stock, startDate, endDate)
                 .stream().map(StockPriceResponse::of).toList();
         return StockInfoResponse.of(stock, stockPriceResponseList);
     }
