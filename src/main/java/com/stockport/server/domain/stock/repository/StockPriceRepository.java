@@ -11,9 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface StockPriceRepository extends JpaRepository<StockPrice, Long> {
-    List<StockPrice> findByStockAndBaseDateBetween(Stock stock, LocalDate startDate, LocalDate endDate);
-
-    boolean existsByStockAndBaseDate(Stock stock, LocalDate baseDate);
+    List<StockPrice> findByStockAndBaseDateBetweenOrderByBaseDateDesc(Stock stock, LocalDate startDate, LocalDate endDate);
 
     @Query("""
     select sp.baseDate
@@ -26,4 +24,6 @@ public interface StockPriceRepository extends JpaRepository<StockPrice, Long> {
             @Param("start") LocalDate start,
             @Param("end") LocalDate end
     );
+
+    List<StockPrice> findAllByBaseDate(LocalDate today);
 }

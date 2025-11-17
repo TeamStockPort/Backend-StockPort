@@ -27,8 +27,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -58,7 +61,7 @@ public class StockServiceImpl implements StockService {
     public StockInfoResponse getStockInfo(String stockCode, LocalDate startDate, LocalDate endDate) {
         Stock stock = stockRepository.findByStockCd(stockCode)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.STOCK_NOT_FOUND));
-        List<StockPriceResponse> stockPriceResponseList = stockPriceRepository.findByStockAndBaseDateBetween(stock, startDate, endDate)
+        List<StockPriceResponse> stockPriceResponseList = stockPriceRepository.findByStockAndBaseDateBetweenOrderByBaseDateDesc(stock, startDate, endDate)
                 .stream().map(StockPriceResponse::of).toList();
         return StockInfoResponse.of(stock, stockPriceResponseList);
     }
@@ -113,13 +116,22 @@ public class StockServiceImpl implements StockService {
     @Override
     @Transactional
     public void saveDailyStockData() {
+        LocalDate today = LocalDate.now();
+
+        Set<String> savedId = stockPriceRepository.findAllByBaseDate(today).stream()
+                .map(sp -> sp.getStock().getStockCd())
+                .collect(Collectors.toSet());
         List<Stock> stockList = stockRepository.findAll();
+
+        List<StockPrice> savePriceList = new ArrayList<>();
         for (Stock stock : stockList) {
-            if (stockPriceRepository.existsByStockAndBaseDate(stock, LocalDate.now()))
+            if (savedId.contains(stock.getStockCd()))
                 continue;
             StockPrice stockPrice = stock.getCurrentPriceInfo().toStockPriceEntity();
             stockPrice.updateStock(stock);
-            stockPriceRepository.save(stockPrice);
+
+            savePriceList.add(stockPrice);
         }
+        stockPriceRepository.saveAll(savePriceList);
     }
 }
