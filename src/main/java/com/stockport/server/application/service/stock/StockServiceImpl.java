@@ -93,7 +93,6 @@ public class StockServiceImpl implements StockService {
 
             for (int i = 0; i < Math.min(30, stockList.size()); i++)
                 stockList.get(i).updateCurrentPriceInfo(stockCurrentPriceList.get(i));
-            log.info("[stock] 현재 주가 데이터 업데이트 진행률 {}%", Math.min((stockIdx + 1) * 30, stocks.size()) * 100 / stocks.size());
         }
         log.info("[stock] 현재 주가 데이터 업데이트 완료");
     }

@@ -47,9 +47,7 @@ public class KisStockPriceAdaptor {
                 throw new GeneralException(ErrorStatus.FEIGN_ERROR);
             }
 
-            KisStockCurrentPrice price = response.getOutput();
-            log.info("[KIS] 주가 조회 성공: {} / 현재가 {}", stockCode, price.getCurrentPrice());
-            return price;
+            return response.getOutput();
 
         } catch (Exception e) {
             log.error("[KIS] 주가 조회 실패 (stockCode={}): {}", stockCode, e.getMessage());
@@ -81,8 +79,6 @@ public class KisStockPriceAdaptor {
             if (!response.getResultCode().equals("0")) {
                 throw new GeneralException(ErrorStatus.FEIGN_ERROR);
             }
-
-            log.info("[KIS] 기간별 주가 조회 성공: {} ({} ~ {}) {}개 조회", stockCode, startDate, endDate, response.getOutput2().size());
             return response;
 
         } catch (Exception e) {
@@ -123,7 +119,6 @@ public class KisStockPriceAdaptor {
                 throw new GeneralException(ErrorStatus.FEIGN_ERROR);
             }
 
-            log.info("[KIS] 멀티 주가 조회 성공");
             return response;
 
         } catch (Exception e) {
