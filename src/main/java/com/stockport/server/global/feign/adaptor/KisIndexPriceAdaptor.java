@@ -46,9 +46,7 @@ public class KisIndexPriceAdaptor {
                 throw new GeneralException(ErrorStatus.FEIGN_ERROR);
             }
 
-            KisIndexCurrentPrice price = response.getOutput();
-            log.info("[KIS] 지수 조회 성공: {} / 현재가={}", indexCode, price.getCurrentPrice());
-            return price;
+            return response.getOutput();
 
         } catch (Exception e) {
             log.error("[KIS] 지수 조회 중 예외 발생 (indexCode={}): {}", indexCode, e.getMessage());
@@ -85,7 +83,6 @@ public class KisIndexPriceAdaptor {
                 throw new GeneralException(ErrorStatus.FEIGN_ERROR);
             }
 
-            log.info("[KIS] 업종 기간별 시세 조회 성공: indexCode={}, 데이터 개수={}",
                     indexCode, response.getOutput2() != null ? response.getOutput2().size() : 0);
 
             return response.getOutput2();
