@@ -83,8 +83,6 @@ public class KisIndexPriceAdaptor {
                 throw new GeneralException(ErrorStatus.FEIGN_ERROR);
             }
 
-                    indexCode, response.getOutput2() != null ? response.getOutput2().size() : 0);
-
             return response.getOutput2();
 
         } catch (Exception e) {
