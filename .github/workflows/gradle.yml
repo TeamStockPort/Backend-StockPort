@@ -62,5 +62,5 @@ jobs:
             docker stop $(docker ps -a -q)
             docker rm $(docker ps -a -q)
             docker pull ${{ secrets.DOCKER_USERNAME }}/stockport
-            docker run -d -p 80:8080 --name cicdtestcontainer ${{ secrets.DOCKER_USERNAME }}/stockport
+            docker run -d -p 8080:8080 --name cicdtestcontainer ${{ secrets.DOCKER_USERNAME }}/stockport
             docker image prune -f
