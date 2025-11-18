@@ -3,6 +3,7 @@ package com.stockport.server.application.controller.backtest;
 import com.stockport.server.application.controller.backtest.dto.request.BacktestRequest;
 import com.stockport.server.application.controller.backtest.dto.response.BacktestResponse;
 import com.stockport.server.application.service.backtest.BacktestService;
+import com.stockport.server.global.apipayload.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +20,8 @@ public class BacktestController {
     private final BacktestService backtestService;
 
     @PostMapping
-    public ResponseEntity<BacktestResponse> runBacktest(@RequestBody BacktestRequest request) {
+    public ApiResponse<BacktestResponse> runBacktest(@RequestBody BacktestRequest request) {
         backtestService.validateRequest(request);
-        return ResponseEntity.ok(backtestService.runBacktest(request));
+        return ApiResponse.onSuccess(backtestService.runBacktest(request));
     }
 }
