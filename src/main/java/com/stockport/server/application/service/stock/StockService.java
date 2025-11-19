@@ -24,5 +24,5 @@ public interface StockService {
 
     void saveDailyStockData();
 
-    void updateAllStockPriceData();
+    void updateTop100Stocks();
 }

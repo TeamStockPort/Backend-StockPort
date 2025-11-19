@@ -154,12 +154,12 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public void updateAllStockPriceData() {
-        List<Stock> stocks = stockRepository.findAll();
+    public void updateTop100Stocks() {
+        List<Stock> stocks = stockRepository.findAllByOrderByMarketCapDesc();
 
         for (Stock stock : stocks) {
-            for (LocalDate updateDate = stock.getListedDate(); updateDate.isBefore(LocalDate.of(2015, 11, 2)); updateDate = updateDate.plusDays(140)) {
-                periodicSaver.saveOnePeriod(stock, updateDate, updateDate.plusDays(139));
+            for (LocalDate updateDate = stock.getListedDate(); updateDate.isBefore(LocalDate.of(2015, 11, 2)); updateDate = updateDate.plusDays(135)) {
+                periodicSaver.saveOnePeriod(stock, updateDate, updateDate.plusDays(134));
             }
 
             log.info("[stock] 전체 주가 데이터 업데이트 완료: {} 진행률 {}%",

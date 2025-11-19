@@ -65,13 +65,13 @@ public class StockUpdateController {
         return ApiResponse.onSuccess("오류 주가 데이터 재업데이트 성공");
     }
 
-    @GetMapping("/update/all-stock-prices")
+    @GetMapping("/update/top-100-stocks")
     @Operation(
-            summary = "모든 주식 가격 데이터 업데이트",
-            description = "모든 주식의 가격 데이터를 업데이트합니다. (오래 걸릴 수 있음)"
+            summary = "상위 100개 주식 데이터 업데이트",
+            description = "시가총액 상위 100개 주식의 데이터를 업데이트합니다."
     )
-    public ApiResponse<String> updateAllStockPriceData() {
-        stockService.updateAllStockPriceData();
-        return ApiResponse.onSuccess("모든 주식 가격 데이터 업데이트 성공");
+    public ApiResponse<String> updateTop100Stocks() {
+        stockService.updateTop100Stocks();
+        return ApiResponse.onSuccess("상위 100개 주식 가격 데이터 업데이트 성공");
     }
 }
